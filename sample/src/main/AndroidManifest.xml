@@ -1,0 +1,29 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.underlegendz.underactivity_sample">
+
+  <application
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:supportsRtl="true"
+    android:theme="@style/UnderBase">
+
+    <activity android:name=".CustomLayoutActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.LAUNCHER" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+    </activity>
+
+    <activity android:name=".FragmentActivity"/>
+    <activity android:name=".NavigationViewActivity"/>
+    <activity android:name=".NavigationDrawerActivity"/>
+    <activity android:name=".ToolbarActivity"/>
+    <activity android:name=".CustomToolbarActivity"/>
+    <activity android:name=".ToolbarDrawerActivity"/>
+
+  </application>
+
+</manifest>
