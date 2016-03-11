@@ -5,7 +5,7 @@ ext {
   bintrayName = 'under-activity'
 
   publishedGroupId = 'com.underlegendz.underactivity'
-  libraryName = 'FBLike'
+  libraryName = 'UnderActivity'
   artifact = 'under-activity'
 
   libraryDescription = 'Library with which you can easily configure multiple parts of modern activities (drawer, toolbar, etc)'
@@ -13,7 +13,7 @@ ext {
   siteUrl = 'https://github.com/ydrojen/underactivity'
   gitUrl = 'https://github.com/ydrojen/underactivity.git'
 
-  libraryVersion = '1.0.1'
+  libraryVersion = '1.0.1-beta2'
 
   developerId = 'ydrojen'
   developerName = 'Jose Fuentes'

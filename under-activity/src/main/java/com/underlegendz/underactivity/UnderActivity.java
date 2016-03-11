@@ -27,7 +27,7 @@ public abstract class UnderActivity extends AppCompatActivity {
   /**
    * Create Activity.
    */
-  @Override public void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Builder builder = new Builder();
     builder = configureActivityBuilder(builder);
