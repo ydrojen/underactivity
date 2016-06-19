@@ -1,4 +1,5 @@
 # UnderActivity
+<img src="underactivity-logo.png" width="250" alt="Logo">
 
 ## Javadoc
 
