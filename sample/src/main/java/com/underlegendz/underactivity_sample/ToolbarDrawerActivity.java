@@ -30,8 +30,8 @@ public class ToolbarDrawerActivity extends UnderActivity
   @Override protected Builder configureActivityBuilder(Builder builder) {
     return builder.setContentLayoutResource(R.layout.custom_layout)
         .setToolbarBackgroundColor(getResources().getColor(R.color.accentColor))
-        .setDrawerHeaderResource(R.layout.header_navigation_drawer)
-        .setDrawerMenuResource(R.menu.drawer_menu)
+        .setDrawerNavigationViewHeaderResource(R.layout.header_navigation_drawer)
+        .setDrawerNavigationViewMenuResource(R.menu.drawer_menu)
         .setDrawerOnNavigationItemSelectedListener(this)
         .setToolbarDrawerIcon(R.drawable.ic_menu);
   }

@@ -1,6 +1,9 @@
 package com.underlegendz.underactivity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,95 +15,46 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import com.underlegendz.library.R;
 
 public abstract class UnderActivity extends AppCompatActivity {
 
   private final String DEFAULT_TAG = "main_content";
-  private NavigationView navigationView;
-  private Toolbar toolbar;
-  private View mainContent;
-  private ViewGroup toolbarContent;
-  private DrawerLayout drawerLayout;
+
+  // Layout views
+  private DrawerLayout mDrawerLayout;
+
+  // Components Views
+  private NavigationView mNavigationView;
+  private ViewGroup mContent;
+  private Toolbar mToolbar;
+
   private boolean back;
+
+  /**
+   * Bind components.
+   */
+  private void bindLayoutViews() {
+    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+  }
 
   /**
    * Create Activity.
    */
-  @Override protected void onCreate(Bundle savedInstanceState) {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Builder builder = new Builder();
     builder = configureActivityBuilder(builder);
-    if (builder.enableToolbar && builder.enableDrawer) {
-      configureToolbarDrawerActivity(builder);
-    } else if (builder.enableToolbar) {
-      configureToolbarActivity(builder);
-    } else if (builder.enableDrawer) {
-      configureDrawerActivity(builder);
-    } else {
-      configureActivity(builder);
-    }
-  }
 
-  /**
-   * Create activity with Drawer & Toolbar.
-   *
-   * @param builder Activity build configuration.
-   */
-  private void configureToolbarDrawerActivity(Builder builder) {
-    setContentView(R.layout.underactivity_toolbar_drawer);
-    bindActivity();
+    setContentView(R.layout.underactivity);
+    bindLayoutViews();
+
     configureDrawer(builder);
     configureToolbar(builder);
-  }
-
-  /**
-   * Create activity with Toolbar.
-   *
-   * @param builder Activity build configuration.
-   */
-  private void configureToolbarActivity(Builder builder) {
-    setContentView(R.layout.underactivity_toolbar);
-    bindActivity();
-    configureToolbar(builder);
-  }
-
-  /**
-   * Create activity with Drawer.
-   *
-   * @param builder Activity build configuration.
-   */
-  private void configureDrawerActivity(Builder builder) {
-    setContentView(R.layout.underactivity_drawer);
-    bindActivity();
-    configureDrawer(builder);
-
-    View customLayout;
-    if (builder.contentLayoutResource != null) {
-      customLayout =
-          getLayoutInflater().inflate(builder.contentLayoutResource, drawerLayout, false);
-    } else {
-      customLayout = builder.contentLayout;
-    }
-    if (customLayout != null) {
-      drawerLayout.removeView(mainContent);
-      drawerLayout.addView(customLayout, 0);
-    }
-  }
-
-  /**
-   * Create simple activity.
-   *
-   * @param builder Activity build configuration.
-   */
-  private void configureActivity(Builder builder) {
-    if (builder.contentLayout != null) {
-      setContentView(builder.contentLayout);
-    } else if (builder.contentLayoutResource != null) {
-      setContentView(builder.contentLayoutResource);
-    } else {
-      setContentView(R.layout.underactivity);
-    }
+    configureContent(builder);
   }
 
   /**
@@ -109,42 +63,58 @@ public abstract class UnderActivity extends AppCompatActivity {
    * @param builder Activity build configuration.
    */
   private void configureDrawer(Builder builder) {
-    View drawerCustomLayout;
-    if (builder.drawerCustomLayoutResource != null) {
-      drawerCustomLayout =
-          getLayoutInflater().inflate(builder.drawerCustomLayoutResource, drawerLayout, false);
-    } else {
-      drawerCustomLayout = builder.drawerCustomLayout;
-    }
+    if (builder.enableDrawer) {
+      // Build Drawer
+      View drawerCustomLayout;
+      if (builder.drawerCustomLayoutResource != null) {
+        drawerCustomLayout =
+            getLayoutInflater().inflate(builder.drawerCustomLayoutResource, mDrawerLayout, false);
+      } else {
+        drawerCustomLayout = builder.drawerCustomLayout;
+      }
 
-    if (drawerCustomLayout != null) { // CustomView
-      drawerLayout.removeView(navigationView);
-      drawerLayout.addView(drawerCustomLayout);
-      DrawerLayout.LayoutParams lp =
-          (DrawerLayout.LayoutParams) drawerCustomLayout.getLayoutParams();
+      DrawerLayout.LayoutParams lp = getDrawerLayoutParams();
       lp.gravity = GravityCompat.START;
-    } else { // NavigationView
-      // Header
-      if (builder.drawerHeader != null) {
-        navigationView.addHeaderView(builder.drawerHeader);
-      } else if (builder.drawerHeaderResource != null) {
-        navigationView.inflateHeaderView(builder.drawerHeaderResource);
-      }
+      if (drawerCustomLayout != null) { // CustomView
+        drawerCustomLayout.setLayoutParams(lp);
+        mDrawerLayout.addView(drawerCustomLayout);
+      } else { // NavigationView
+        mNavigationView = new NavigationView(this);
+        mNavigationView.setLayoutParams(lp);
+        mDrawerLayout.addView(mNavigationView);
 
-      // Menu
-      if (builder.drawerMenuResource != null) {
-        navigationView.inflateMenu(builder.drawerMenuResource);
-      }
+        // Header
+        if (builder.drawerNavigationViewHeader != null) {
+          mNavigationView.addHeaderView(builder.drawerNavigationViewHeader);
+        } else if (builder.drawerNavigationViewHeaderResource != null) {
+          mNavigationView.inflateHeaderView(builder.drawerNavigationViewHeaderResource);
+        }
 
-      if (builder.drawerBackgroundColor != null) {
-        navigationView.setBackgroundColor(builder.drawerBackgroundColor);
-      }
+        // Menu
+        if (builder.drawerNavigationViewMenuResource != null) {
+          mNavigationView.inflateMenu(builder.drawerNavigationViewMenuResource);
+        }
 
-      if (builder.drawerOnNavigationItemSelectedListener != null) {
-        navigationView.setNavigationItemSelectedListener(
-            builder.drawerOnNavigationItemSelectedListener);
+        if (builder.drawerNavigationViewBackgroundColor != null) {
+          mNavigationView.setBackgroundColor(builder.drawerNavigationViewBackgroundColor);
+        }
+
+        if (builder.drawerOnNavigationItemSelectedListener != null) {
+          mNavigationView.setNavigationItemSelectedListener(
+              builder.drawerOnNavigationItemSelectedListener);
+        }
       }
+    } else {
+      // No drawer
+      mDrawerLayout.removeView(mNavigationView);
     }
+  }
+
+  @NonNull
+  private DrawerLayout.LayoutParams getDrawerLayoutParams() {
+    return new DrawerLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT);
   }
 
   /**
@@ -153,49 +123,91 @@ public abstract class UnderActivity extends AppCompatActivity {
    * @param builder Activity build configuration.
    */
   private void configureToolbar(Builder builder) {
-    Toolbar customToolbar;
-    if (builder.toolbarResource != null) {
-      customToolbar =
-          (Toolbar) getLayoutInflater().inflate(builder.toolbarResource, toolbarContent, false);
-    } else {
-      customToolbar = builder.toolbar;
+    if(builder.enableAppBarLayout){
+      mContent = new CoordinatorLayout(this);
+    }else{
+      mContent = new LinearLayout(this);
+      ((LinearLayout) mContent).setOrientation(LinearLayout.VERTICAL);
     }
-    if (customToolbar != null) {
-      toolbarContent.removeView(toolbar);
-      toolbarContent.addView(customToolbar, 0);
-      toolbar = customToolbar;
-    } else {
+    mContent.setLayoutParams(getDrawerLayoutParams());
+    mDrawerLayout.addView(mContent, 0);
+
+    if (builder.enableToolbar) {
+      Toolbar customToolbar;
+      if (builder.toolbarResource != null) {
+        customToolbar =
+            (Toolbar) getLayoutInflater().inflate(builder.toolbarResource, mContent,
+                false);
+      } else {
+        customToolbar = builder.toolbar;
+      }
+      if (customToolbar != null) {
+        mToolbar = customToolbar;
+      } else {
+        mToolbar = new Toolbar(this);
+        CoordinatorLayout.LayoutParams lp =
+            new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        mToolbar.setLayoutParams(lp);
+      }
+
+      if(builder.enableAppBarLayout){
+        AppBarLayout appBarLayout = new AppBarLayout(this);
+        CoordinatorLayout.LayoutParams lp =
+            new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        appBarLayout.setLayoutParams(lp);
+        appBarLayout.addView(mToolbar);
+        mContent.addView(appBarLayout, 0);
+      }else {
+        mContent.addView(mToolbar);
+      }
+
       if (builder.toolbarPopupTheme != null) {
-        toolbar.setPopupTheme(builder.toolbarPopupTheme);
+        mToolbar.setPopupTheme(builder.toolbarPopupTheme);
       }
       if (builder.toolbarBackgroundColor != null) {
-        toolbar.setBackgroundColor(builder.toolbarBackgroundColor);
+        mToolbar.setBackgroundColor(builder.toolbarBackgroundColor);
       }
     }
+  }
 
+  private void configureContent(Builder builder) {
     View customLayout;
     if (builder.contentLayoutResource != null) {
       customLayout =
-          getLayoutInflater().inflate(builder.contentLayoutResource, drawerLayout, false);
+          getLayoutInflater().inflate(builder.contentLayoutResource, mContent, false);
     } else {
       customLayout = builder.contentLayout;
     }
     if (customLayout != null) {
-      toolbarContent.removeView(mainContent);
-      toolbarContent.addView(customLayout);
+      //mCoordinatorLayout.removeView(mMainContent);
+      mContent.addView(customLayout);
+      ViewGroup.LayoutParams layoutParams = customLayout.getLayoutParams();
+      layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+      layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+    }else{
+      FrameLayout content = new FrameLayout(this);
+      content.setId(R.id.main_content);
+      mContent.addView(content);
+      ViewGroup.LayoutParams layoutParams = content.getLayoutParams();
+      layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+      layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
     }
 
-    setSupportActionBar(toolbar);
-    final ActionBar ab = getSupportActionBar();
+    if (mToolbar != null) {
+      setSupportActionBar(mToolbar);
+      final ActionBar ab = getSupportActionBar();
 
-    if (ab != null) {
-      if (builder.toolbarDrawerIcon != null) {
-        ab.setHomeAsUpIndicator(builder.toolbarDrawerIcon);
-        ab.setDisplayHomeAsUpEnabled(true);
-      }
-      if (builder.toolbarBack) {
-        ab.setDisplayHomeAsUpEnabled(true);
-        back = builder.toolbarBack;
+      if (ab != null) {
+        if (builder.toolbarDrawerIcon != null) {
+          ab.setHomeAsUpIndicator(builder.toolbarDrawerIcon);
+          ab.setDisplayHomeAsUpEnabled(true);
+        }
+        if (builder.toolbarBack) {
+          ab.setDisplayHomeAsUpEnabled(true);
+          back = builder.toolbarBack;
+        }
       }
     }
   }
@@ -246,26 +258,16 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
   }
 
-  /**
-   * Bind components.
-   */
-  private void bindActivity() {
-    toolbar = (Toolbar) findViewById(R.id.toolbar);
-    navigationView = (NavigationView) findViewById(R.id.nav_view);
-    mainContent = findViewById(R.id.main_content);
-    drawerLayout = (DrawerLayout) findViewById(R.id.drawer_content);
-    toolbarContent = (ViewGroup) findViewById(R.id.toolbar_content);
-  }
-
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case android.R.id.home:
         if (back) {
           onBackPressed();
           return true;
         }
-        if (drawerLayout != null) {
-          drawerLayout.openDrawer(GravityCompat.START);
+        if (mDrawerLayout != null) {
+          mDrawerLayout.openDrawer(GravityCompat.START);
           return true;
         }
     }
@@ -273,11 +275,11 @@ public abstract class UnderActivity extends AppCompatActivity {
   }
 
   public Toolbar getToolbar() {
-    return toolbar;
+    return mToolbar;
   }
 
   public DrawerLayout getDrawerLayout() {
-    return drawerLayout;
+    return mDrawerLayout;
   }
 
   protected abstract Builder configureActivityBuilder(Builder builder);
@@ -285,14 +287,15 @@ public abstract class UnderActivity extends AppCompatActivity {
   protected static class Builder {
     private boolean enableToolbar = false;
     private boolean enableDrawer = false;
+    private boolean enableAppBarLayout = false;
     private View contentLayout = null;
     private Integer contentLayoutResource = null;
     private View drawerCustomLayout = null;
     private Integer drawerCustomLayoutResource = null;
-    private View drawerHeader = null;
-    private Integer drawerHeaderResource = null;
-    private Integer drawerMenuResource = null;
-    private Integer drawerBackgroundColor = null;
+    private View drawerNavigationViewHeader = null;
+    private Integer drawerNavigationViewHeaderResource = null;
+    private Integer drawerNavigationViewMenuResource = null;
+    private Integer drawerNavigationViewBackgroundColor = null;
     private NavigationView.OnNavigationItemSelectedListener drawerOnNavigationItemSelectedListener;
     private Toolbar toolbar = null;
     private Integer toolbarResource = null;
@@ -304,7 +307,7 @@ public abstract class UnderActivity extends AppCompatActivity {
     /**
      * Enable/Disable Toolbar.
      *
-     * @param enableToolbar It indicates whether the activity has toolbar.
+     * @param enableToolbar It indicates whether the activity has mToolbar.
      * @return builder.
      */
     public Builder enableToolbar(boolean enableToolbar) {
@@ -320,6 +323,17 @@ public abstract class UnderActivity extends AppCompatActivity {
      */
     public Builder enableDrawer(boolean enableDrawer) {
       this.enableDrawer = enableDrawer;
+      return this;
+    }
+
+    /**
+     * Enable/Disable AppBarLayout for Toolbar.
+     *
+     * @param enableAppBarLayout It indicates whether the toolbar is content in an AppBarLayout.
+     * @return builder.
+     */
+    public Builder enableAppBarLayout(boolean enableAppBarLayout) {
+      this.enableAppBarLayout = enableAppBarLayout;
       return this;
     }
 
@@ -349,8 +363,7 @@ public abstract class UnderActivity extends AppCompatActivity {
 
     /**
      * Set custom layout view for navigation drawer. This method overrides any custom layout
-     * resource for
-     * navigation drawer and all configuration for NavigationView and enable drawer.
+     * resource for navigation drawer and all configuration for NavigationView and enable drawer.
      *
      * @param drawerCustomLayout Navigation drawer's layout view.
      * @return builder.
@@ -358,9 +371,9 @@ public abstract class UnderActivity extends AppCompatActivity {
     public Builder setDrawerCustomLayout(View drawerCustomLayout) {
       this.drawerCustomLayout = drawerCustomLayout;
       drawerCustomLayoutResource = null;
-      drawerHeader = null;
-      drawerHeaderResource = null;
-      drawerMenuResource = null;
+      drawerNavigationViewHeader = null;
+      drawerNavigationViewHeaderResource = null;
+      drawerNavigationViewMenuResource = null;
       drawerOnNavigationItemSelectedListener = null;
       enableDrawer = true;
       return this;
@@ -368,8 +381,7 @@ public abstract class UnderActivity extends AppCompatActivity {
 
     /**
      * Set custom layout resource for navigation drawer. This method overrides any custom layout
-     * view for
-     * navigation drawer and all configuration for NavigationView and enable drawer.
+     * view for navigation drawer and all configuration for NavigationView and enable drawer.
      *
      * @param drawerCustomLayoutResource Navigation drawer's layout resource.
      * @return builder.
@@ -377,9 +389,9 @@ public abstract class UnderActivity extends AppCompatActivity {
     public Builder setDrawerCustomLayoutResource(Integer drawerCustomLayoutResource) {
       this.drawerCustomLayoutResource = drawerCustomLayoutResource;
       drawerCustomLayout = null;
-      drawerHeader = null;
-      drawerHeaderResource = null;
-      drawerMenuResource = null;
+      drawerNavigationViewHeader = null;
+      drawerNavigationViewHeaderResource = null;
+      drawerNavigationViewMenuResource = null;
       drawerOnNavigationItemSelectedListener = null;
       enableDrawer = true;
       return this;
@@ -387,15 +399,14 @@ public abstract class UnderActivity extends AppCompatActivity {
 
     /**
      * Set header view for NavigationView drawer. This method overrides header resource and any
-     * custom
-     * drawer's layout configuration and enable drawer.
+     * custom drawer's layout configuration and enable drawer.
      *
-     * @param drawerHeader NavigationView Header's layout view.
+     * @param drawerNavigationViewHeader NavigationView Header's layout view.
      * @return builder.
      */
-    public Builder setDrawerHeader(View drawerHeader) {
-      this.drawerHeader = drawerHeader;
-      drawerHeaderResource = null;
+    public Builder setDrawerNavigationViewHeader(View drawerNavigationViewHeader) {
+      this.drawerNavigationViewHeader = drawerNavigationViewHeader;
+      drawerNavigationViewHeaderResource = null;
       drawerCustomLayout = null;
       drawerCustomLayoutResource = null;
       enableDrawer = true;
@@ -406,12 +417,12 @@ public abstract class UnderActivity extends AppCompatActivity {
      * Set header view for NavigationView drawer. This method overrides header view and any custom
      * drawer's layout configuration and enable drawer.
      *
-     * @param drawerHeaderResource NavigationView Header's layout resource.
+     * @param drawerNavigationViewHeaderResource NavigationView Header's layout resource.
      * @return builder.
      */
-    public Builder setDrawerHeaderResource(Integer drawerHeaderResource) {
-      this.drawerHeaderResource = drawerHeaderResource;
-      drawerHeader = null;
+    public Builder setDrawerNavigationViewHeaderResource(Integer drawerNavigationViewHeaderResource) {
+      this.drawerNavigationViewHeaderResource = drawerNavigationViewHeaderResource;
+      drawerNavigationViewHeader = null;
       drawerCustomLayout = null;
       drawerCustomLayoutResource = null;
       enableDrawer = true;
@@ -420,15 +431,13 @@ public abstract class UnderActivity extends AppCompatActivity {
 
     /**
      * Set NavigationView menu resource. This method overrides any custom drawer's layout
-     * configuration
-     * and
-     * enable drawer.
+     * configuration and enable drawer.
      *
-     * @param drawerMenuResource NavigationView menu xml.
+     * @param drawerNavigationViewMenuResource NavigationView menu xml.
      * @return builder.
      */
-    public Builder setDrawerMenuResource(Integer drawerMenuResource) {
-      this.drawerMenuResource = drawerMenuResource;
+    public Builder setDrawerNavigationViewMenuResource(Integer drawerNavigationViewMenuResource) {
+      this.drawerNavigationViewMenuResource = drawerNavigationViewMenuResource;
       drawerCustomLayout = null;
       drawerCustomLayoutResource = null;
       enableDrawer = true;
@@ -439,11 +448,11 @@ public abstract class UnderActivity extends AppCompatActivity {
      * Set NavigationView drawer background color. This method overrides any custom drawer's layout
      * configuration and enable drawer.
      *
-     * @param drawerBackgroundColor Drawer's background color.
+     * @param drawerNavigationViewBackgroundColor Drawer's background color.
      * @return builder.
      */
-    public Builder setDrawerBackgroundColor(Integer drawerBackgroundColor) {
-      this.drawerBackgroundColor = drawerBackgroundColor;
+    public Builder setDrawerNavigationViewBackgroundColor(Integer drawerNavigationViewBackgroundColor) {
+      this.drawerNavigationViewBackgroundColor = drawerNavigationViewBackgroundColor;
       drawerCustomLayout = null;
       drawerCustomLayoutResource = null;
       enableDrawer = true;
@@ -452,8 +461,7 @@ public abstract class UnderActivity extends AppCompatActivity {
 
     /**
      * Set OnNavigationItemSelectedListener for drawer's NavigationView. This method overrides any
-     * custom
-     * drawer's layout configuration and enable drawer.
+     * custom drawer's layout configuration and enable drawer.
      *
      * @param drawerOnNavigationItemSelectedListener ItemSelectedListener.
      * @return builder.
@@ -468,8 +476,8 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set custom Toolbar view. This method overrides any custom toolbar layout resource and enable
-     * toolbar.
+     * Set custom Toolbar view. This method overrides any custom mToolbar layout resource and
+     * enable mToolbar.
      *
      * @param toolbar Toolbar's view.
      * @return builder.
@@ -482,8 +490,8 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set custom Toolbar layout resource. This method overrides any custom toolbar view and enable
-     * toolbar.
+     * Set custom Toolbar layout resource. This method overrides any custom mToolbar view and
+     * enable mToolbar.
      *
      * @param toolbarResource Toolbar's layout resource.
      * @return builder.
@@ -496,9 +504,9 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set Toolbar's popup menu style. This method enable toolbar.
+     * Set Toolbar's popup menu style. This method enable mToolbar.
      *
-     * @param toolbarPopupTheme Style resource for toolbar popup menu.
+     * @param toolbarPopupTheme Style resource for mToolbar popup menu.
      * @return builder.
      */
     public Builder setToolbarPopupTheme(Integer toolbarPopupTheme) {
@@ -508,9 +516,9 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set Toolbar's background color. This method enable toolbar.
+     * Set Toolbar's background color. This method enable mToolbar.
      *
-     * @param toolbarBackgroundColor Color for toolbar background.
+     * @param toolbarBackgroundColor Color for mToolbar background.
      * @return builder.
      */
     public Builder setToolbarBackgroundColor(Integer toolbarBackgroundColor) {
@@ -520,7 +528,7 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set Toolbar's navigation drawer icon resource. This method enable toolbar and navigation
+     * Set Toolbar's navigation drawer icon resource. This method enable mToolbar and navigation
      * drawer.
      *
      * @param toolbarDrawerIcon Navigation drawer icon resource.
@@ -534,7 +542,7 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Enable/disable Toolbar's back icon and back funcionality. This method enable toolbar.
+     * Enable/disable Toolbar's back icon and back funcionality. This method enable mToolbar.
      *
      * @param toolbarBack enable/disable.
      * @return builder.

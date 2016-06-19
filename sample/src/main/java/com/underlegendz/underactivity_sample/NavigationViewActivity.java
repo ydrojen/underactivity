@@ -27,8 +27,8 @@ public class NavigationViewActivity extends UnderActivity
     implements NavigationView.OnNavigationItemSelectedListener {
   @Override protected Builder configureActivityBuilder(Builder builder) {
     return builder.setContentLayoutResource(R.layout.custom_layout)
-        .setDrawerMenuResource(R.menu.drawer_menu)
-        .setDrawerHeaderResource(R.layout.header_navigation_drawer)
+        .setDrawerNavigationViewMenuResource(R.menu.drawer_menu)
+        .setDrawerNavigationViewHeaderResource(R.layout.header_navigation_drawer)
         .setDrawerOnNavigationItemSelectedListener(this);
   }
 
