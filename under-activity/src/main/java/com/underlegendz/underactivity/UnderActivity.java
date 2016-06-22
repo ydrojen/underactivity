@@ -1,13 +1,20 @@
 package com.underlegendz.underactivity;
 
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.IntDef;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.StyleRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +25,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import com.underlegendz.library.R;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 public abstract class UnderActivity extends AppCompatActivity {
 
@@ -33,13 +42,6 @@ public abstract class UnderActivity extends AppCompatActivity {
   private boolean back;
 
   /**
-   * Bind components.
-   */
-  private void bindLayoutViews() {
-    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-  }
-
-  /**
    * Create Activity.
    */
   @Override
@@ -48,8 +50,8 @@ public abstract class UnderActivity extends AppCompatActivity {
     Builder builder = new Builder();
     builder = configureActivityBuilder(builder);
 
-    setContentView(R.layout.underactivity);
-    bindLayoutViews();
+    mDrawerLayout = new DrawerLayout(this);
+    setContentView(mDrawerLayout);
 
     configureDrawer(builder);
     configureToolbar(builder);
@@ -170,50 +172,82 @@ public abstract class UnderActivity extends AppCompatActivity {
     mDrawerLayout.addView(mContent, 0);
 
     if (builder.enableToolbar) {
-      Toolbar customToolbar;
-      if (builder.toolbarResource != null) {
-        customToolbar =
-            (Toolbar) getLayoutInflater().inflate(builder.toolbarResource, mContent,
-                false);
+
+      if (builder.appBarLayout != null || builder.appBarLayoutResource != null) {
+        AppBarLayout appBarLayout = builder.appBarLayout;
+        if (appBarLayout == null) {
+          appBarLayout =
+              (AppBarLayout) getLayoutInflater().inflate(builder.appBarLayoutResource, mContent,
+                  false);
+        }
+        mContent.addView(appBarLayout);
+        for (int i = 0; i < appBarLayout.getChildCount(); i++) {
+          if (appBarLayout.getChildAt(i) instanceof Toolbar) {
+            mToolbar = (Toolbar) appBarLayout.getChildAt(i);
+            break;
+          }
+        }
       } else {
-        customToolbar = builder.toolbar;
+        Toolbar customToolbar;
+        if (builder.toolbarResource != null) {
+          customToolbar =
+              (Toolbar) getLayoutInflater().inflate(builder.toolbarResource, mContent, false);
+        } else {
+          customToolbar = builder.toolbar;
+        }
+
+        if (customToolbar != null) {
+          mToolbar = customToolbar;
+        } else {
+          mToolbar = new Toolbar(this);
+        }
+
+        if (builder.enableCoordinatorAppBarLayout) {
+          AppBarLayout appBarLayout = new AppBarLayout(this);
+          CoordinatorLayout.LayoutParams coordinatorLayoutParams =
+              new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+          appBarLayout.setLayoutParams(coordinatorLayoutParams);
+
+          AppBarLayout.LayoutParams appBarLayoutParams =
+              new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+          appBarLayoutParams.setScrollFlags(builder.appBarLayoutScrollFlags);
+          mToolbar.setLayoutParams(appBarLayoutParams);
+          appBarLayout.addView(mToolbar);
+
+          coordinatorLayoutParams.setBehavior(new AppBarLayout.Behavior());
+          appBarLayout.setLayoutParams(coordinatorLayoutParams);
+          mContent.addView(appBarLayout, 0);
+        } else {
+          LinearLayout.LayoutParams linearLayoutParams =
+              new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+          mToolbar.setLayoutParams(linearLayoutParams);
+          mContent.addView(mToolbar);
+        }
       }
 
-      if (customToolbar != null) {
-        mToolbar = customToolbar;
-      } else {
-        mToolbar = new Toolbar(this);
-      }
+      if (mToolbar != null) {
+        if (builder.toolbarPopupTheme != null) {
+          mToolbar.setPopupTheme(builder.toolbarPopupTheme);
+        }
+        if (builder.toolbarBackgroundColor != null) {
+          mToolbar.setBackgroundColor(builder.toolbarBackgroundColor);
+        }
 
-      if(builder.enableCoordinatorAppBarLayout){
-        AppBarLayout appBarLayout = new AppBarLayout(this);
-        CoordinatorLayout.LayoutParams coordinatorLayoutParams =
-            new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        appBarLayout.setLayoutParams(coordinatorLayoutParams);
+        setSupportActionBar(mToolbar);
+        final ActionBar ab = getSupportActionBar();
 
-        AppBarLayout.LayoutParams appBarLayoutParams  = new AppBarLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        appBarLayoutParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-        mToolbar.setLayoutParams(appBarLayoutParams);
-        appBarLayout.addView(mToolbar);
-
-        coordinatorLayoutParams.setBehavior(new AppBarLayout.Behavior());
-        appBarLayout.setLayoutParams(coordinatorLayoutParams);
-        mContent.addView(appBarLayout, 0);
-      }else {
-        LinearLayout.LayoutParams linearLayoutParams =
-            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        mToolbar.setLayoutParams(linearLayoutParams);
-        mContent.addView(mToolbar);
-      }
-
-      if (builder.toolbarPopupTheme != null) {
-        mToolbar.setPopupTheme(builder.toolbarPopupTheme);
-      }
-      if (builder.toolbarBackgroundColor != null) {
-        mToolbar.setBackgroundColor(builder.toolbarBackgroundColor);
+        if (ab != null) {
+          if (builder.toolbarBack) {
+            if (builder.toolbarBackIcon != null) {
+              ab.setHomeAsUpIndicator(builder.toolbarBackIcon);
+            }
+            ab.setDisplayHomeAsUpEnabled(true);
+            back = true;
+          } else if (builder.toolbarDrawerIcon != null) {
+            ab.setHomeAsUpIndicator(builder.toolbarDrawerIcon);
+            ab.setDisplayHomeAsUpEnabled(true);
+          }
+        }
       }
     }
   }
@@ -241,22 +275,6 @@ public abstract class UnderActivity extends AppCompatActivity {
       layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
       if(builder.enableCoordinatorAppBarLayout){
         ((CoordinatorLayout.LayoutParams)layoutParams).setBehavior(new AppBarLayout.ScrollingViewBehavior());
-      }
-    }
-
-    if (mToolbar != null) {
-      setSupportActionBar(mToolbar);
-      final ActionBar ab = getSupportActionBar();
-
-      if (ab != null) {
-        if (builder.toolbarDrawerIcon != null) {
-          ab.setHomeAsUpIndicator(builder.toolbarDrawerIcon);
-          ab.setDisplayHomeAsUpEnabled(true);
-        }
-        if (builder.toolbarBack) {
-          ab.setDisplayHomeAsUpEnabled(true);
-          back = builder.toolbarBack;
-        }
       }
     }
   }
@@ -316,7 +334,15 @@ public abstract class UnderActivity extends AppCompatActivity {
           return true;
         }
         if (mDrawerLayout != null) {
-          mDrawerLayout.openDrawer(GravityCompat.START);
+          try{
+            mDrawerLayout.openDrawer(GravityCompat.START);
+          }catch (IllegalArgumentException exceptionStart){
+            try{
+              mDrawerLayout.openDrawer(GravityCompat.END);
+            }catch (IllegalArgumentException exceptionEnd){
+              // do nothing
+            }
+          }
           return true;
         }
     }
@@ -363,12 +389,17 @@ public abstract class UnderActivity extends AppCompatActivity {
     private Integer toolbarPopupTheme = null;
     private Integer toolbarBackgroundColor = null;
     private Integer toolbarDrawerIcon = null;
+    private Integer toolbarBackIcon = null;
     private boolean toolbarBack = false;
+    // AppBarLayout
+    private int appBarLayoutScrollFlags = -1;
+    private AppBarLayout appBarLayout = null;
+    private Integer appBarLayoutResource = null;
 
     /**
      * Enable/Disable Toolbar.
      *
-     * @param enableToolbar It indicates whether the activity has mToolbar.
+     * @param enableToolbar It indicates whether the activity has toolbar.
      * @return builder.
      */
     public Builder enableToolbar(boolean enableToolbar) {
@@ -417,7 +448,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param contentLayoutResource Activity's layout resource.
      * @return builder.
      */
-    public Builder setContentLayoutResource(Integer contentLayoutResource) {
+    public Builder setContentLayoutResource(@LayoutRes Integer contentLayoutResource) {
       this.contentLayoutResource = contentLayoutResource;
       this.contentLayout = null;
       return this;
@@ -450,7 +481,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param drawerCustomLayoutResource Navigation drawer's layout resource.
      * @return builder.
      */
-    public Builder setDrawerCustomLayoutResource(Integer drawerCustomLayoutResource) {
+    public Builder setDrawerCustomLayoutResource(@LayoutRes Integer drawerCustomLayoutResource) {
       this.drawerCustomLayoutResource = drawerCustomLayoutResource;
       drawerCustomLayout = null;
       drawerNavigationViewHeader = null;
@@ -484,7 +515,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param drawerNavigationViewHeaderResource NavigationView Header's layout resource.
      * @return builder.
      */
-    public Builder setDrawerNavigationViewHeaderResource(Integer drawerNavigationViewHeaderResource) {
+    public Builder setDrawerNavigationViewHeaderResource(@LayoutRes Integer drawerNavigationViewHeaderResource) {
       this.drawerNavigationViewHeaderResource = drawerNavigationViewHeaderResource;
       drawerNavigationViewHeader = null;
       drawerCustomLayout = null;
@@ -500,7 +531,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param drawerNavigationViewMenuResource NavigationView menu xml.
      * @return builder.
      */
-    public Builder setDrawerNavigationViewMenuResource(Integer drawerNavigationViewMenuResource) {
+    public Builder setDrawerNavigationViewMenuResource(@MenuRes Integer drawerNavigationViewMenuResource) {
       this.drawerNavigationViewMenuResource = drawerNavigationViewMenuResource;
       drawerCustomLayout = null;
       drawerCustomLayoutResource = null;
@@ -515,7 +546,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param drawerNavigationViewBackgroundColor Drawer's background color.
      * @return builder.
      */
-    public Builder setDrawerNavigationViewBackgroundColor(Integer drawerNavigationViewBackgroundColor) {
+    public Builder setDrawerNavigationViewBackgroundColor(@ColorInt Integer drawerNavigationViewBackgroundColor) {
       this.drawerNavigationViewBackgroundColor = drawerNavigationViewBackgroundColor;
       drawerCustomLayout = null;
       drawerCustomLayoutResource = null;
@@ -567,7 +598,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param endDrawerCustomLayoutResource Navigation drawer's layout resource.
      * @return builder.
      */
-    public Builder setEndDrawerCustomLayoutResource(Integer endDrawerCustomLayoutResource) {
+    public Builder setEndDrawerCustomLayoutResource(@LayoutRes Integer endDrawerCustomLayoutResource) {
       this.endDrawerCustomLayoutResource = endDrawerCustomLayoutResource;
       endDrawerCustomLayout = null;
       endDrawerNavigationViewHeader = null;
@@ -601,7 +632,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param endDrawerNavigationViewHeaderResource NavigationView Header's layout resource.
      * @return builder.
      */
-    public Builder setEndDrawerNavigationViewHeaderResource(Integer endDrawerNavigationViewHeaderResource) {
+    public Builder setEndDrawerNavigationViewHeaderResource(@DrawableRes Integer endDrawerNavigationViewHeaderResource) {
       this.endDrawerNavigationViewHeaderResource = endDrawerNavigationViewHeaderResource;
       endDrawerNavigationViewHeader = null;
       endDrawerCustomLayout = null;
@@ -617,7 +648,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param endDrawerNavigationViewMenuResource NavigationView menu xml.
      * @return builder.
      */
-    public Builder setEndDrawerNavigationViewMenuResource(Integer endDrawerNavigationViewMenuResource) {
+    public Builder setEndDrawerNavigationViewMenuResource(@MenuRes Integer endDrawerNavigationViewMenuResource) {
       this.endDrawerNavigationViewMenuResource = endDrawerNavigationViewMenuResource;
       endDrawerCustomLayout = null;
       endDrawerCustomLayoutResource = null;
@@ -632,7 +663,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param endDrawerNavigationViewBackgroundColor Drawer's background color.
      * @return builder.
      */
-    public Builder setEndDrawerNavigationViewBackgroundColor(Integer endDrawerNavigationViewBackgroundColor) {
+    public Builder setEndDrawerNavigationViewBackgroundColor(@ColorInt Integer endDrawerNavigationViewBackgroundColor) {
       this.endDrawerNavigationViewBackgroundColor = endDrawerNavigationViewBackgroundColor;
       endDrawerCustomLayout = null;
       endDrawerCustomLayoutResource = null;
@@ -658,8 +689,8 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set custom Toolbar view. This method overrides any custom mToolbar layout resource and
-     * enable mToolbar.
+     * Set custom Toolbar view. This method overrides any custom toolbar layout resource and
+     * enable toolbar.
      *
      * @param toolbar Toolbar's view.
      * @return builder.
@@ -672,13 +703,13 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set custom Toolbar layout resource. This method overrides any custom mToolbar view and
-     * enable mToolbar.
+     * Set custom Toolbar layout resource. This method overrides any custom toolbar view and
+     * enable toolbar.
      *
      * @param toolbarResource Toolbar's layout resource.
      * @return builder.
      */
-    public Builder setToolbarResource(Integer toolbarResource) {
+    public Builder setToolbarResource(@LayoutRes Integer toolbarResource) {
       this.toolbarResource = toolbarResource;
       toolbar = null;
       enableToolbar = true;
@@ -686,37 +717,37 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set Toolbar's popup menu style. This method enable mToolbar.
+     * Set Toolbar's popup menu style. This method enable toolbar.
      *
-     * @param toolbarPopupTheme Style resource for mToolbar popup menu.
+     * @param toolbarPopupTheme Style resource for toolbar popup menu.
      * @return builder.
      */
-    public Builder setToolbarPopupTheme(Integer toolbarPopupTheme) {
+    public Builder setToolbarPopupTheme(@StyleRes Integer toolbarPopupTheme) {
       this.toolbarPopupTheme = toolbarPopupTheme;
       enableToolbar = true;
       return this;
     }
 
     /**
-     * Set Toolbar's background color. This method enable mToolbar.
+     * Set Toolbar's background color. This method enable toolbar.
      *
-     * @param toolbarBackgroundColor Color for mToolbar background.
+     * @param toolbarBackgroundColor Color for toolbar background.
      * @return builder.
      */
-    public Builder setToolbarBackgroundColor(Integer toolbarBackgroundColor) {
+    public Builder setToolbarBackgroundColor(@ColorInt Integer toolbarBackgroundColor) {
       this.toolbarBackgroundColor = toolbarBackgroundColor;
       enableToolbar = true;
       return this;
     }
 
     /**
-     * Set Toolbar's navigation drawer icon resource. This method enable mToolbar and navigation
+     * Set Toolbar's navigation drawer icon resource. This method enable toolbar and navigation
      * drawer.
      *
      * @param toolbarDrawerIcon Navigation drawer icon resource.
      * @return builder.
      */
-    public Builder setToolbarDrawerIcon(Integer toolbarDrawerIcon) {
+    public Builder setToolbarDrawerIcon(@DrawableRes Integer toolbarDrawerIcon) {
       this.toolbarDrawerIcon = toolbarDrawerIcon;
       enableDrawer = true;
       enableToolbar = true;
@@ -724,7 +755,7 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Enable/disable Toolbar's back icon and back funcionality. This method enable mToolbar.
+     * Enable/disable Toolbar's back icon and back funcionality. This method enable toolbar.
      *
      * @param toolbarBack enable/disable.
      * @return builder.
@@ -734,5 +765,116 @@ public abstract class UnderActivity extends AppCompatActivity {
       enableToolbar = true;
       return this;
     }
+
+    /**
+     * Set Toolbar's back icon and enable back funcionality. This method enable toolbar.
+     *
+     * @param toolbarBackIcon Toolbar's back icon resource.
+     * @return builder.
+     */
+    public Builder setToolbarBackIcon(@DrawableRes Integer toolbarBackIcon) {
+      this.toolbarBack = true;
+      enableToolbar = true;
+      this.toolbarBackIcon = toolbarBackIcon;
+      return this;
+    }
+
+    /**
+     * Set AppBarLayout scroll flags. This method enable toolbar and coordinatorAppBarLayout.
+     * @param appBarLayoutScrollFlags Flags for AppBarLayout's scroll.
+     * @return
+     */
+    public Builder setAppBarLayoutScrollFlags(@ScrollFlags int appBarLayoutScrollFlags){
+      this.appBarLayoutScrollFlags = appBarLayoutScrollFlags;
+      this.enableToolbar = true;
+      this.enableCoordinatorAppBarLayout = true;
+      return this;
+    }
+
+    /**
+     * Set custom AppBarLayout view. This method overrides any custom toolbar and
+     * enable toolbar and coordinatorAppBarLayout.
+     *
+     * @param appBarLayout AppBarLayout's view.
+     * @return builder.
+     */
+    public Builder setAppBarLayout(AppBarLayout appBarLayout) {
+      this.appBarLayout = appBarLayout;
+      toolbar = null;
+      toolbarResource = null;
+      appBarLayoutResource = null;
+      enableToolbar = true;
+      enableCoordinatorAppBarLayout = true;
+      return this;
+    }
+
+    /**
+     * Set custom AppBarLayout layout resource. This method overrides any custom toolbar and
+     * enable toolbar and coordinatorAppBarLayout.
+     *
+     * @param appBarLayoutResource Toolbar's layout resource.
+     * @return builder.
+     */
+    public Builder setAppBarLayoutResource(@LayoutRes Integer appBarLayoutResource) {
+      this.appBarLayoutResource = appBarLayoutResource;
+      toolbar = null;
+      toolbarResource = null;
+      appBarLayout = null;
+      enableCoordinatorAppBarLayout = true;
+      enableToolbar = true;
+      return this;
+    }
+
+    @IntDef(flag=true, value={
+        SCROLL_FLAG_SCROLL,
+        SCROLL_FLAG_EXIT_UNTIL_COLLAPSED,
+        SCROLL_FLAG_ENTER_ALWAYS,
+        SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED,
+        SCROLL_FLAG_SNAP
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface ScrollFlags {}
+
+    /**
+     * The view will be scroll in direct relation to scroll events. This flag needs to be
+     * set for any of the other flags to take effect. If any sibling views
+     * before this one do not have this flag, then this value has no effect.
+     */
+    public static final int SCROLL_FLAG_SCROLL = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL;
+
+    /**
+     * When exiting (scrolling off screen) the view will be scrolled until it is
+     * 'collapsed'. The collapsed height is defined by the view's minimum height.
+     *
+     * @see ViewCompat#getMinimumHeight(View)
+     * @see View#setMinimumHeight(int)
+     */
+    public static final int SCROLL_FLAG_EXIT_UNTIL_COLLAPSED = AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED;
+
+    /**
+     * When entering (scrolling on screen) the view will scroll on any downwards
+     * scroll event, regardless of whether the scrolling view is also scrolling. This
+     * is commonly referred to as the 'quick return' pattern.
+     */
+    public static final int SCROLL_FLAG_ENTER_ALWAYS = AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS;
+
+    /**
+     * An additional flag for 'enterAlways' which modifies the returning view to
+     * only initially scroll back to it's collapsed height. Once the scrolling view has
+     * reached the end of it's scroll range, the remainder of this view will be scrolled
+     * into view. The collapsed height is defined by the view's minimum height.
+     *
+     * @see ViewCompat#getMinimumHeight(View)
+     * @see View#setMinimumHeight(int)
+     */
+    public static final int SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED = AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED;
+
+    /**
+     * Upon a scroll ending, if the view is only partially visible then it will be snapped
+     * and scrolled to it's closest edge. For example, if the view only has it's bottom 25%
+     * displayed, it will be scrolled off screen completely. Conversely, if it's bottom 75%
+     * is visible then it will be scrolled fully into view.
+     */
+    public static final int SCROLL_FLAG_SNAP = AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP;
   }
 }

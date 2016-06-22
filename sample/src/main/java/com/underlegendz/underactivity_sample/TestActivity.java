@@ -15,20 +15,50 @@ package com.underlegendz.underactivity_sample;
  * limitations under the License.
  */
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 import com.underlegendz.underactivity.UnderActivity;
 
 public class TestActivity extends UnderActivity {
   @Override protected Builder configureActivityBuilder(Builder builder) {
-    return builder.enableToolbar(true)
+    return builder
+        .setContentLayoutResource(R.layout.custom_layout)
+        //.enableCoordinatorAppBarLayout(true)
+        //.setAppBarLayoutScrollFlags(Builder.SCROLL_FLAG_SCROLL|Builder.SCROLL_FLAG_SNAP|Builder.SCROLL_FLAG_ENTER_ALWAYS)
         .setToolbarBackgroundColor(getResources().getColor(R.color.accentColor))
-        .enableCoordinatorAppBarLayout(true)
-        .setDrawerCustomLayoutResource(R.layout.custom_drawer)
-        .setEndDrawerCustomLayoutResource(R.layout.custom_drawer);
+        .setDrawerCustomLayoutResource(R.layout.custom_drawer);
   }
 
   @Override public void onPostCreate(Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
-    setFragment(new RecyclerFragment());
+    //setFragment(new RecyclerFragment());
+    TextView text = (TextView) findViewById(R.id.text);
+    TextView code = (TextView) findViewById(R.id.code);
+
+    text.setText(R.string.drawer_customlayout_text);
+    code.setText(R.string.drawer_customlayout_code);
+
+    findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        Intent i = new Intent(v.getContext(), ToolbarActivity.class);
+        v.getContext().startActivity(i);
+      }
+    });
+    findViewById(R.id.next_drawer).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        Intent i = new Intent(v.getContext(), ToolbarActivity.class);
+        v.getContext().startActivity(i);
+      }
+    });
+    findViewById(R.id.share_drawer).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_url));
+        v.getContext().startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+      }
+    });
   }
 }
