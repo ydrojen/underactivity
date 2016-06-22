@@ -27,7 +27,6 @@ public abstract class UnderActivity extends AppCompatActivity {
   private DrawerLayout mDrawerLayout;
 
   // Components Views
-  private NavigationView mNavigationView;
   private ViewGroup mContent;
   private Toolbar mToolbar;
 
@@ -64,7 +63,7 @@ public abstract class UnderActivity extends AppCompatActivity {
    */
   private void configureDrawer(Builder builder) {
     if (builder.enableDrawer) {
-      // Build Drawer
+      // Build Start Drawer
       View drawerCustomLayout;
       if (builder.drawerCustomLayoutResource != null) {
         drawerCustomLayout =
@@ -78,35 +77,73 @@ public abstract class UnderActivity extends AppCompatActivity {
       if (drawerCustomLayout != null) { // CustomView
         drawerCustomLayout.setLayoutParams(lp);
         mDrawerLayout.addView(drawerCustomLayout);
-      } else { // NavigationView
-        mNavigationView = new NavigationView(this);
-        mNavigationView.setLayoutParams(lp);
-        mDrawerLayout.addView(mNavigationView);
+      } else if(builder.drawerNavigationViewMenuResource != null){ // NavigationView
+        NavigationView navigationView = new NavigationView(this);
+        navigationView.setLayoutParams(lp);
+        mDrawerLayout.addView(navigationView);
 
         // Header
         if (builder.drawerNavigationViewHeader != null) {
-          mNavigationView.addHeaderView(builder.drawerNavigationViewHeader);
+          navigationView.addHeaderView(builder.drawerNavigationViewHeader);
         } else if (builder.drawerNavigationViewHeaderResource != null) {
-          mNavigationView.inflateHeaderView(builder.drawerNavigationViewHeaderResource);
+          navigationView.inflateHeaderView(builder.drawerNavigationViewHeaderResource);
         }
 
         // Menu
         if (builder.drawerNavigationViewMenuResource != null) {
-          mNavigationView.inflateMenu(builder.drawerNavigationViewMenuResource);
+          navigationView.inflateMenu(builder.drawerNavigationViewMenuResource);
         }
 
         if (builder.drawerNavigationViewBackgroundColor != null) {
-          mNavigationView.setBackgroundColor(builder.drawerNavigationViewBackgroundColor);
+          navigationView.setBackgroundColor(builder.drawerNavigationViewBackgroundColor);
         }
 
         if (builder.drawerOnNavigationItemSelectedListener != null) {
-          mNavigationView.setNavigationItemSelectedListener(
+          navigationView.setNavigationItemSelectedListener(
               builder.drawerOnNavigationItemSelectedListener);
         }
       }
-    } else {
-      // No drawer
-      mDrawerLayout.removeView(mNavigationView);
+
+      // Build End Drawer
+      View endDrawerCustomLayout;
+      if (builder.endDrawerCustomLayoutResource != null) {
+        endDrawerCustomLayout =
+            getLayoutInflater().inflate(builder.endDrawerCustomLayoutResource, mDrawerLayout, false);
+      } else {
+        endDrawerCustomLayout = builder.endDrawerCustomLayout;
+      }
+
+      DrawerLayout.LayoutParams lpEnd = getDrawerLayoutParams();
+      lpEnd.gravity = GravityCompat.END;
+      if (endDrawerCustomLayout != null) { // CustomView
+        endDrawerCustomLayout.setLayoutParams(lpEnd);
+        mDrawerLayout.addView(endDrawerCustomLayout);
+      } else if(builder.endDrawerNavigationViewMenuResource != null){ // NavigationView
+        NavigationView endNavigationView = new NavigationView(this);
+        endNavigationView.setLayoutParams(lpEnd);
+        mDrawerLayout.addView(endNavigationView);
+
+        // Header
+        if (builder.endDrawerNavigationViewHeader != null) {
+          endNavigationView.addHeaderView(builder.endDrawerNavigationViewHeader);
+        } else if (builder.endDrawerNavigationViewHeaderResource != null) {
+          endNavigationView.inflateHeaderView(builder.endDrawerNavigationViewHeaderResource);
+        }
+
+        // Menu
+        if (builder.endDrawerNavigationViewMenuResource != null) {
+          endNavigationView.inflateMenu(builder.endDrawerNavigationViewMenuResource);
+        }
+
+        if (builder.endDrawerNavigationViewBackgroundColor != null) {
+          endNavigationView.setBackgroundColor(builder.endDrawerNavigationViewBackgroundColor);
+        }
+
+        if (builder.endDrawerOnNavigationItemSelectedListener != null) {
+          endNavigationView.setNavigationItemSelectedListener(
+              builder.endDrawerOnNavigationItemSelectedListener);
+        }
+      }
     }
   }
 
@@ -123,7 +160,7 @@ public abstract class UnderActivity extends AppCompatActivity {
    * @param builder Activity build configuration.
    */
   private void configureToolbar(Builder builder) {
-    if(builder.enableAppBarLayout){
+    if(builder.enableCoordinatorAppBarLayout){
       mContent = new CoordinatorLayout(this);
     }else{
       mContent = new LinearLayout(this);
@@ -141,25 +178,34 @@ public abstract class UnderActivity extends AppCompatActivity {
       } else {
         customToolbar = builder.toolbar;
       }
+
       if (customToolbar != null) {
         mToolbar = customToolbar;
       } else {
         mToolbar = new Toolbar(this);
-        CoordinatorLayout.LayoutParams lp =
-            new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        mToolbar.setLayoutParams(lp);
       }
 
-      if(builder.enableAppBarLayout){
+      if(builder.enableCoordinatorAppBarLayout){
         AppBarLayout appBarLayout = new AppBarLayout(this);
-        CoordinatorLayout.LayoutParams lp =
+        CoordinatorLayout.LayoutParams coordinatorLayoutParams =
             new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        appBarLayout.setLayoutParams(lp);
+        appBarLayout.setLayoutParams(coordinatorLayoutParams);
+
+        AppBarLayout.LayoutParams appBarLayoutParams  = new AppBarLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        appBarLayoutParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+        mToolbar.setLayoutParams(appBarLayoutParams);
         appBarLayout.addView(mToolbar);
+
+        coordinatorLayoutParams.setBehavior(new AppBarLayout.Behavior());
+        appBarLayout.setLayoutParams(coordinatorLayoutParams);
         mContent.addView(appBarLayout, 0);
       }else {
+        LinearLayout.LayoutParams linearLayoutParams =
+            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        mToolbar.setLayoutParams(linearLayoutParams);
         mContent.addView(mToolbar);
       }
 
@@ -193,6 +239,9 @@ public abstract class UnderActivity extends AppCompatActivity {
       ViewGroup.LayoutParams layoutParams = content.getLayoutParams();
       layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
       layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+      if(builder.enableCoordinatorAppBarLayout){
+        ((CoordinatorLayout.LayoutParams)layoutParams).setBehavior(new AppBarLayout.ScrollingViewBehavior());
+      }
     }
 
     if (mToolbar != null) {
@@ -285,11 +334,14 @@ public abstract class UnderActivity extends AppCompatActivity {
   protected abstract Builder configureActivityBuilder(Builder builder);
 
   protected static class Builder {
+    // Components enabled
     private boolean enableToolbar = false;
     private boolean enableDrawer = false;
-    private boolean enableAppBarLayout = false;
+    private boolean enableCoordinatorAppBarLayout = false;
+    // Main Content
     private View contentLayout = null;
     private Integer contentLayoutResource = null;
+    // Start Drawer
     private View drawerCustomLayout = null;
     private Integer drawerCustomLayoutResource = null;
     private View drawerNavigationViewHeader = null;
@@ -297,6 +349,15 @@ public abstract class UnderActivity extends AppCompatActivity {
     private Integer drawerNavigationViewMenuResource = null;
     private Integer drawerNavigationViewBackgroundColor = null;
     private NavigationView.OnNavigationItemSelectedListener drawerOnNavigationItemSelectedListener;
+    // End Drawer
+    private View endDrawerCustomLayout = null;
+    private Integer endDrawerCustomLayoutResource = null;
+    private View endDrawerNavigationViewHeader = null;
+    private Integer endDrawerNavigationViewHeaderResource = null;
+    private Integer endDrawerNavigationViewMenuResource = null;
+    private Integer endDrawerNavigationViewBackgroundColor = null;
+    private NavigationView.OnNavigationItemSelectedListener endDrawerOnNavigationItemSelectedListener;
+    // Toolbar
     private Toolbar toolbar = null;
     private Integer toolbarResource = null;
     private Integer toolbarPopupTheme = null;
@@ -327,13 +388,14 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Enable/Disable AppBarLayout for Toolbar.
+     * Enable/Disable CoordinatorLayout for Content and AppBarLayout for Toolbar.
      *
-     * @param enableAppBarLayout It indicates whether the toolbar is content in an AppBarLayout.
+     * @param enableCoordinatorAppBarLayout It indicates whether create CoordinatorLayout for the
+     * main content and include the Toolbar in an AppBarLayout.
      * @return builder.
      */
-    public Builder enableAppBarLayout(boolean enableAppBarLayout) {
-      this.enableAppBarLayout = enableAppBarLayout;
+    public Builder enableCoordinatorAppBarLayout(boolean enableCoordinatorAppBarLayout) {
+      this.enableCoordinatorAppBarLayout = enableCoordinatorAppBarLayout;
       return this;
     }
 
@@ -362,8 +424,9 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set custom layout view for navigation drawer. This method overrides any custom layout
-     * resource for navigation drawer and all configuration for NavigationView and enable drawer.
+     * Set custom layout view for navigation drawer with gravity 'start'. This method overrides any
+     * custom layout resource for navigation drawer with gravity 'start' and all configuration for
+     * NavigationView with gravity 'start' and enable drawer.
      *
      * @param drawerCustomLayout Navigation drawer's layout view.
      * @return builder.
@@ -380,8 +443,9 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set custom layout resource for navigation drawer. This method overrides any custom layout
-     * view for navigation drawer and all configuration for NavigationView and enable drawer.
+     * Set custom layout resource for navigation drawer with gravity 'start'. This method overrides
+     * any custom layout view for navigation drawer with gravity 'start' and all configuration for
+     * NavigationView with gravity 'start' and enable drawer.
      *
      * @param drawerCustomLayoutResource Navigation drawer's layout resource.
      * @return builder.
@@ -398,8 +462,8 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set header view for NavigationView drawer. This method overrides header resource and any
-     * custom drawer's layout configuration and enable drawer.
+     * Set header view for NavigationView drawer with gravity 'start'. This method overrides header
+     * resource and any custom drawer's layout configuration for gravity 'start' and enable drawer.
      *
      * @param drawerNavigationViewHeader NavigationView Header's layout view.
      * @return builder.
@@ -414,8 +478,8 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set header view for NavigationView drawer. This method overrides header view and any custom
-     * drawer's layout configuration and enable drawer.
+     * Set header view for NavigationView drawer with gravity 'start'. This method overrides header
+     * view and any custom drawer's layout configuration for gravity 'start' and enable drawer.
      *
      * @param drawerNavigationViewHeaderResource NavigationView Header's layout resource.
      * @return builder.
@@ -430,8 +494,8 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set NavigationView menu resource. This method overrides any custom drawer's layout
-     * configuration and enable drawer.
+     * Set NavigationView with gravity 'start' menu resource. This method overrides any custom
+     * drawer's layout configuration for gravity 'start' and enable drawer.
      *
      * @param drawerNavigationViewMenuResource NavigationView menu xml.
      * @return builder.
@@ -445,8 +509,8 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set NavigationView drawer background color. This method overrides any custom drawer's layout
-     * configuration and enable drawer.
+     * Set NavigationView drawer with gravity 'start' background color. This method overrides any
+     * custom drawer's layout configuration for gravity 'start' and enable drawer.
      *
      * @param drawerNavigationViewBackgroundColor Drawer's background color.
      * @return builder.
@@ -460,8 +524,9 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set OnNavigationItemSelectedListener for drawer's NavigationView. This method overrides any
-     * custom drawer's layout configuration and enable drawer.
+     * Set OnNavigationItemSelectedListener for drawer's NavigationView with gravity 'start'. This
+     * method overrides any custom drawer's layout configuration for gravity 'start and enable
+     * drawer.
      *
      * @param drawerOnNavigationItemSelectedListener ItemSelectedListener.
      * @return builder.
@@ -471,6 +536,123 @@ public abstract class UnderActivity extends AppCompatActivity {
       this.drawerOnNavigationItemSelectedListener = drawerOnNavigationItemSelectedListener;
       drawerCustomLayout = null;
       drawerCustomLayoutResource = null;
+      enableDrawer = true;
+      return this;
+    }
+
+    /**
+     * Set custom layout view for navigation drawer with gravity 'end'. This method overrides any
+     * custom layout resource for navigation drawer with gravity 'end' and all configuration for
+     * NavigationView with gravity 'end' and enable drawer.
+     *
+     * @param endDrawerCustomLayout Navigation drawer's layout view.
+     * @return builder.
+     */
+    public Builder setEndDrawerCustomLayout(View endDrawerCustomLayout) {
+      this.endDrawerCustomLayout = drawerCustomLayout;
+      endDrawerCustomLayoutResource = null;
+      endDrawerNavigationViewHeader = null;
+      endDrawerNavigationViewHeaderResource = null;
+      endDrawerNavigationViewMenuResource = null;
+      endDrawerOnNavigationItemSelectedListener = null;
+      enableDrawer = true;
+      return this;
+    }
+
+    /**
+     * Set custom layout resource for navigation drawer with gravity 'end'. This method overrides
+     * any custom layout view for navigation drawer with gravity 'end' and all configuration for
+     * NavigationView with gravity 'end' and enable drawer.
+     *
+     * @param endDrawerCustomLayoutResource Navigation drawer's layout resource.
+     * @return builder.
+     */
+    public Builder setEndDrawerCustomLayoutResource(Integer endDrawerCustomLayoutResource) {
+      this.endDrawerCustomLayoutResource = endDrawerCustomLayoutResource;
+      endDrawerCustomLayout = null;
+      endDrawerNavigationViewHeader = null;
+      endDrawerNavigationViewHeaderResource = null;
+      endDrawerNavigationViewMenuResource = null;
+      endDrawerOnNavigationItemSelectedListener = null;
+      enableDrawer = true;
+      return this;
+    }
+
+    /**
+     * Set header view for NavigationView drawer with gravity 'end'. This method overrides header
+     * resource and any custom drawer's layout configuration for gravity 'end' and enable drawer.
+     *
+     * @param endDrawerNavigationViewHeader NavigationView Header's layout view.
+     * @return builder.
+     */
+    public Builder setEndDrawerNavigationViewHeader(View endDrawerNavigationViewHeader) {
+      this.endDrawerNavigationViewHeader = endDrawerNavigationViewHeader;
+      endDrawerNavigationViewHeaderResource = null;
+      endDrawerCustomLayout = null;
+      endDrawerCustomLayoutResource = null;
+      enableDrawer = true;
+      return this;
+    }
+
+    /**
+     * Set header view for NavigationView drawer with gravity 'end'. This method overrides header
+     * view and any custom drawer's layout configuration for gravity 'end' and enable drawer.
+     *
+     * @param endDrawerNavigationViewHeaderResource NavigationView Header's layout resource.
+     * @return builder.
+     */
+    public Builder setEndDrawerNavigationViewHeaderResource(Integer endDrawerNavigationViewHeaderResource) {
+      this.endDrawerNavigationViewHeaderResource = endDrawerNavigationViewHeaderResource;
+      endDrawerNavigationViewHeader = null;
+      endDrawerCustomLayout = null;
+      endDrawerCustomLayoutResource = null;
+      enableDrawer = true;
+      return this;
+    }
+
+    /**
+     * Set NavigationView with gravity 'end' menu resource. This method overrides any custom
+     * drawer's layout configuration for gravity 'end' and enable drawer.
+     *
+     * @param endDrawerNavigationViewMenuResource NavigationView menu xml.
+     * @return builder.
+     */
+    public Builder setEndDrawerNavigationViewMenuResource(Integer endDrawerNavigationViewMenuResource) {
+      this.endDrawerNavigationViewMenuResource = endDrawerNavigationViewMenuResource;
+      endDrawerCustomLayout = null;
+      endDrawerCustomLayoutResource = null;
+      enableDrawer = true;
+      return this;
+    }
+
+    /**
+     * Set NavigationView drawer with gravity 'end' background color. This method overrides any
+     * custom drawer's layout configuration for gravity 'end' and enable drawer.
+     *
+     * @param endDrawerNavigationViewBackgroundColor Drawer's background color.
+     * @return builder.
+     */
+    public Builder setEndDrawerNavigationViewBackgroundColor(Integer endDrawerNavigationViewBackgroundColor) {
+      this.endDrawerNavigationViewBackgroundColor = endDrawerNavigationViewBackgroundColor;
+      endDrawerCustomLayout = null;
+      endDrawerCustomLayoutResource = null;
+      enableDrawer = true;
+      return this;
+    }
+
+    /**
+     * Set OnNavigationItemSelectedListener for drawer's NavigationView with gravity 'end'. This
+     * method overrides any custom drawer's layout configuration for gravity 'end and enable
+     * drawer.
+     *
+     * @param endDrawerOnNavigationItemSelectedListener ItemSelectedListener.
+     * @return builder.
+     */
+    public Builder setEndDrawerOnNavigationItemSelectedListener(
+        NavigationView.OnNavigationItemSelectedListener endDrawerOnNavigationItemSelectedListener) {
+      this.endDrawerOnNavigationItemSelectedListener = endDrawerOnNavigationItemSelectedListener;
+      endDrawerCustomLayout = null;
+      endDrawerCustomLayoutResource = null;
       enableDrawer = true;
       return this;
     }
