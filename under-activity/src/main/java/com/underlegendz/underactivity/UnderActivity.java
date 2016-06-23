@@ -9,21 +9,17 @@ import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import com.underlegendz.library.R;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -53,230 +49,16 @@ public abstract class UnderActivity extends AppCompatActivity {
     mDrawerLayout = new DrawerLayout(this);
     setContentView(mDrawerLayout);
 
-    configureDrawer(builder);
-    configureToolbar(builder);
-    configureContent(builder);
-  }
-
-  /**
-   * Configure Activity's Drawer.
-   *
-   * @param builder Activity build configuration.
-   */
-  private void configureDrawer(Builder builder) {
-    if (builder.enableDrawer) {
-      // Build Start Drawer
-      View drawerCustomLayout;
-      if (builder.drawerCustomLayoutResource != null) {
-        drawerCustomLayout =
-            getLayoutInflater().inflate(builder.drawerCustomLayoutResource, mDrawerLayout, false);
-      } else {
-        drawerCustomLayout = builder.drawerCustomLayout;
-      }
-
-      DrawerLayout.LayoutParams lp = getDrawerLayoutParams();
-      lp.gravity = GravityCompat.START;
-      if (drawerCustomLayout != null) { // CustomView
-        drawerCustomLayout.setLayoutParams(lp);
-        mDrawerLayout.addView(drawerCustomLayout);
-      } else if(builder.drawerNavigationViewMenuResource != null){ // NavigationView
-        NavigationView navigationView = new NavigationView(this);
-        navigationView.setLayoutParams(lp);
-        mDrawerLayout.addView(navigationView);
-
-        // Header
-        if (builder.drawerNavigationViewHeader != null) {
-          navigationView.addHeaderView(builder.drawerNavigationViewHeader);
-        } else if (builder.drawerNavigationViewHeaderResource != null) {
-          navigationView.inflateHeaderView(builder.drawerNavigationViewHeaderResource);
-        }
-
-        // Menu
-        if (builder.drawerNavigationViewMenuResource != null) {
-          navigationView.inflateMenu(builder.drawerNavigationViewMenuResource);
-        }
-
-        if (builder.drawerNavigationViewBackgroundColor != null) {
-          navigationView.setBackgroundColor(builder.drawerNavigationViewBackgroundColor);
-        }
-
-        if (builder.drawerOnNavigationItemSelectedListener != null) {
-          navigationView.setNavigationItemSelectedListener(
-              builder.drawerOnNavigationItemSelectedListener);
-        }
-      }
-
-      // Build End Drawer
-      View endDrawerCustomLayout;
-      if (builder.endDrawerCustomLayoutResource != null) {
-        endDrawerCustomLayout =
-            getLayoutInflater().inflate(builder.endDrawerCustomLayoutResource, mDrawerLayout, false);
-      } else {
-        endDrawerCustomLayout = builder.endDrawerCustomLayout;
-      }
-
-      DrawerLayout.LayoutParams lpEnd = getDrawerLayoutParams();
-      lpEnd.gravity = GravityCompat.END;
-      if (endDrawerCustomLayout != null) { // CustomView
-        endDrawerCustomLayout.setLayoutParams(lpEnd);
-        mDrawerLayout.addView(endDrawerCustomLayout);
-      } else if(builder.endDrawerNavigationViewMenuResource != null){ // NavigationView
-        NavigationView endNavigationView = new NavigationView(this);
-        endNavigationView.setLayoutParams(lpEnd);
-        mDrawerLayout.addView(endNavigationView);
-
-        // Header
-        if (builder.endDrawerNavigationViewHeader != null) {
-          endNavigationView.addHeaderView(builder.endDrawerNavigationViewHeader);
-        } else if (builder.endDrawerNavigationViewHeaderResource != null) {
-          endNavigationView.inflateHeaderView(builder.endDrawerNavigationViewHeaderResource);
-        }
-
-        // Menu
-        if (builder.endDrawerNavigationViewMenuResource != null) {
-          endNavigationView.inflateMenu(builder.endDrawerNavigationViewMenuResource);
-        }
-
-        if (builder.endDrawerNavigationViewBackgroundColor != null) {
-          endNavigationView.setBackgroundColor(builder.endDrawerNavigationViewBackgroundColor);
-        }
-
-        if (builder.endDrawerOnNavigationItemSelectedListener != null) {
-          endNavigationView.setNavigationItemSelectedListener(
-              builder.endDrawerOnNavigationItemSelectedListener);
-        }
-      }
-    }
+    ConfigureDrawer.configureDrawer(builder, this);
+    ConfigureToolbar.configureToolbar(builder, this);
+    ConfigureContent.configureContent(builder, this);
   }
 
   @NonNull
-  private DrawerLayout.LayoutParams getDrawerLayoutParams() {
+  DrawerLayout.LayoutParams getDrawerLayoutParams() {
     return new DrawerLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT);
-  }
-
-  /**
-   * Configure Activity's Toolbar.
-   *
-   * @param builder Activity build configuration.
-   */
-  private void configureToolbar(Builder builder) {
-    if(builder.enableCoordinatorAppBarLayout){
-      mContent = new CoordinatorLayout(this);
-    }else{
-      mContent = new LinearLayout(this);
-      ((LinearLayout) mContent).setOrientation(LinearLayout.VERTICAL);
-    }
-    mContent.setLayoutParams(getDrawerLayoutParams());
-    mDrawerLayout.addView(mContent, 0);
-
-    if (builder.enableToolbar) {
-
-      if (builder.appBarLayout != null || builder.appBarLayoutResource != null) {
-        AppBarLayout appBarLayout = builder.appBarLayout;
-        if (appBarLayout == null) {
-          appBarLayout =
-              (AppBarLayout) getLayoutInflater().inflate(builder.appBarLayoutResource, mContent,
-                  false);
-        }
-        mContent.addView(appBarLayout);
-        for (int i = 0; i < appBarLayout.getChildCount(); i++) {
-          if (appBarLayout.getChildAt(i) instanceof Toolbar) {
-            mToolbar = (Toolbar) appBarLayout.getChildAt(i);
-            break;
-          }
-        }
-      } else {
-        Toolbar customToolbar;
-        if (builder.toolbarResource != null) {
-          customToolbar =
-              (Toolbar) getLayoutInflater().inflate(builder.toolbarResource, mContent, false);
-        } else {
-          customToolbar = builder.toolbar;
-        }
-
-        if (customToolbar != null) {
-          mToolbar = customToolbar;
-        } else {
-          mToolbar = new Toolbar(this);
-        }
-
-        if (builder.enableCoordinatorAppBarLayout) {
-          AppBarLayout appBarLayout = new AppBarLayout(this);
-          CoordinatorLayout.LayoutParams coordinatorLayoutParams =
-              new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-          appBarLayout.setLayoutParams(coordinatorLayoutParams);
-
-          AppBarLayout.LayoutParams appBarLayoutParams =
-              new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-          appBarLayoutParams.setScrollFlags(builder.appBarLayoutScrollFlags);
-          mToolbar.setLayoutParams(appBarLayoutParams);
-          appBarLayout.addView(mToolbar);
-
-          coordinatorLayoutParams.setBehavior(new AppBarLayout.Behavior());
-          appBarLayout.setLayoutParams(coordinatorLayoutParams);
-          mContent.addView(appBarLayout, 0);
-        } else {
-          LinearLayout.LayoutParams linearLayoutParams =
-              new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-          mToolbar.setLayoutParams(linearLayoutParams);
-          mContent.addView(mToolbar);
-        }
-      }
-
-      if (mToolbar != null) {
-        if (builder.toolbarPopupTheme != null) {
-          mToolbar.setPopupTheme(builder.toolbarPopupTheme);
-        }
-        if (builder.toolbarBackgroundColor != null) {
-          mToolbar.setBackgroundColor(builder.toolbarBackgroundColor);
-        }
-
-        setSupportActionBar(mToolbar);
-        final ActionBar ab = getSupportActionBar();
-
-        if (ab != null) {
-          if (builder.toolbarBack) {
-            if (builder.toolbarBackIcon != null) {
-              ab.setHomeAsUpIndicator(builder.toolbarBackIcon);
-            }
-            ab.setDisplayHomeAsUpEnabled(true);
-            back = true;
-          } else if (builder.toolbarDrawerIcon != null) {
-            ab.setHomeAsUpIndicator(builder.toolbarDrawerIcon);
-            ab.setDisplayHomeAsUpEnabled(true);
-          }
-        }
-      }
-    }
-  }
-
-  private void configureContent(Builder builder) {
-    View customLayout;
-    if (builder.contentLayoutResource != null) {
-      customLayout =
-          getLayoutInflater().inflate(builder.contentLayoutResource, mContent, false);
-    } else {
-      customLayout = builder.contentLayout;
-    }
-    if (customLayout != null) {
-      //mCoordinatorLayout.removeView(mMainContent);
-      mContent.addView(customLayout);
-      ViewGroup.LayoutParams layoutParams = customLayout.getLayoutParams();
-      layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-      layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-    }else{
-      FrameLayout content = new FrameLayout(this);
-      content.setId(R.id.main_content);
-      mContent.addView(content);
-      ViewGroup.LayoutParams layoutParams = content.getLayoutParams();
-      layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-      layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-      if(builder.enableCoordinatorAppBarLayout){
-        ((CoordinatorLayout.LayoutParams)layoutParams).setBehavior(new AppBarLayout.ScrollingViewBehavior());
-      }
-    }
   }
 
   /**
@@ -357,44 +139,64 @@ public abstract class UnderActivity extends AppCompatActivity {
     return mDrawerLayout;
   }
 
+  ViewGroup getContent() {
+    return mContent;
+  }
+
+  void setContent(ViewGroup content) {
+    mContent = content;
+  }
+
+  void setToolbar(Toolbar toolbar) {
+    mToolbar = toolbar;
+  }
+
+  boolean isBack() {
+    return back;
+  }
+
+  void setBack(boolean back) {
+    this.back = back;
+  }
+
   protected abstract Builder configureActivityBuilder(Builder builder);
 
   protected static class Builder {
     // Components enabled
-    private boolean enableToolbar = false;
-    private boolean enableDrawer = false;
-    private boolean enableCoordinatorAppBarLayout = false;
+    protected boolean enableToolbar = false;
+    protected boolean enableDrawer = false;
+    protected boolean enableCoordinatorAppBarLayout = false;
     // Main Content
-    private View contentLayout = null;
-    private Integer contentLayoutResource = null;
+    protected View contentLayout = null;
+    protected Integer contentLayoutResource = null;
     // Start Drawer
-    private View drawerCustomLayout = null;
-    private Integer drawerCustomLayoutResource = null;
-    private View drawerNavigationViewHeader = null;
-    private Integer drawerNavigationViewHeaderResource = null;
-    private Integer drawerNavigationViewMenuResource = null;
-    private Integer drawerNavigationViewBackgroundColor = null;
-    private NavigationView.OnNavigationItemSelectedListener drawerOnNavigationItemSelectedListener;
+    protected View drawerCustomLayout = null;
+    protected Integer drawerCustomLayoutResource = null;
+    protected View drawerNavigationViewHeader = null;
+    protected Integer drawerNavigationViewHeaderResource = null;
+    protected Integer drawerNavigationViewMenuResource = null;
+    protected Integer drawerNavigationViewBackgroundColor = null;
+    protected NavigationView.OnNavigationItemSelectedListener drawerOnNavigationItemSelectedListener;
     // End Drawer
-    private View endDrawerCustomLayout = null;
-    private Integer endDrawerCustomLayoutResource = null;
-    private View endDrawerNavigationViewHeader = null;
-    private Integer endDrawerNavigationViewHeaderResource = null;
-    private Integer endDrawerNavigationViewMenuResource = null;
-    private Integer endDrawerNavigationViewBackgroundColor = null;
-    private NavigationView.OnNavigationItemSelectedListener endDrawerOnNavigationItemSelectedListener;
+    protected View endDrawerCustomLayout = null;
+    protected Integer endDrawerCustomLayoutResource = null;
+    protected View endDrawerNavigationViewHeader = null;
+    protected Integer endDrawerNavigationViewHeaderResource = null;
+    protected Integer endDrawerNavigationViewMenuResource = null;
+    protected Integer endDrawerNavigationViewBackgroundColor = null;
+    protected NavigationView.OnNavigationItemSelectedListener endDrawerOnNavigationItemSelectedListener;
     // Toolbar
-    private Toolbar toolbar = null;
-    private Integer toolbarResource = null;
-    private Integer toolbarPopupTheme = null;
-    private Integer toolbarBackgroundColor = null;
-    private Integer toolbarDrawerIcon = null;
-    private Integer toolbarBackIcon = null;
-    private boolean toolbarBack = false;
+    protected Toolbar toolbar = null;
+    protected Integer toolbarResource = null;
+    protected Integer toolbarPopupTheme = null;
+    protected Integer toolbarBackgroundColor = null;
+    protected Integer toolbarDrawerIcon = null;
+    protected Integer toolbarBackIcon = null;
+    protected boolean toolbarBack = false;
     // AppBarLayout
-    private int appBarLayoutScrollFlags = -1;
-    private AppBarLayout appBarLayout = null;
-    private Integer appBarLayoutResource = null;
+    protected int appBarLayoutScrollFlags = -1;
+    protected AppBarLayout appBarLayout = null;
+    protected Integer appBarLayoutResource = null;
 
     /**
      * Enable/Disable Toolbar.
@@ -782,7 +584,7 @@ public abstract class UnderActivity extends AppCompatActivity {
     /**
      * Set AppBarLayout scroll flags. This method enable toolbar and coordinatorAppBarLayout.
      * @param appBarLayoutScrollFlags Flags for AppBarLayout's scroll.
-     * @return
+     * @return builder
      */
     public Builder setAppBarLayoutScrollFlags(@ScrollFlags int appBarLayoutScrollFlags){
       this.appBarLayoutScrollFlags = appBarLayoutScrollFlags;
