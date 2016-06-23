@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -34,6 +35,7 @@ public abstract class UnderActivity extends AppCompatActivity {
   // Components Views
   private ViewGroup mContent;
   private Toolbar mToolbar;
+  private TabLayout mTabLayout;
 
   private boolean back;
 
@@ -139,6 +141,14 @@ public abstract class UnderActivity extends AppCompatActivity {
     return mDrawerLayout;
   }
 
+  public TabLayout getTabLayout() {
+    return mTabLayout;
+  }
+
+  void setTabLayout(TabLayout tabLayout) {
+    mTabLayout = tabLayout;
+  }
+
   ViewGroup getContent() {
     return mContent;
   }
@@ -166,6 +176,7 @@ public abstract class UnderActivity extends AppCompatActivity {
     boolean enableToolbar = false;
     boolean enableDrawer = false;
     boolean enableCoordinatorAppBarLayout = false;
+    boolean enableToolbarTabs = false;
     // Main Content
     View contentLayout = null;
     Integer contentLayoutResource = null;
@@ -194,9 +205,11 @@ public abstract class UnderActivity extends AppCompatActivity {
     Integer toolbarBackIcon = null;
     boolean toolbarBack = false;
     // AppBarLayout
-    int appBarLayoutScrollFlags = -1;
+    int appBarLayoutScrollFlags = 0;
     AppBarLayout appBarLayout = null;
     Integer appBarLayoutResource = null;
+    Integer toolbarTabLayoutBackgroundColor = null;
+    int tabLayoutScrollFlags = 0;
 
     /**
      * Enable/Disable Toolbar.
@@ -229,6 +242,18 @@ public abstract class UnderActivity extends AppCompatActivity {
      */
     public Builder enableCoordinatorAppBarLayout(boolean enableCoordinatorAppBarLayout) {
       this.enableCoordinatorAppBarLayout = enableCoordinatorAppBarLayout;
+      return this;
+    }
+
+    /**
+     * Enable/Disable Toolbar Tabs. This method enable coordinatorAppBarLayout.
+     *
+     * @param enableToolbarTabs It indicates whether create TabLayout in an AppBarLayout.
+     * @return builder.
+     */
+    public Builder enableToolbarTabs(boolean enableToolbarTabs) {
+      this.enableToolbarTabs = enableToolbarTabs;
+      this.enableCoordinatorAppBarLayout = true;
       return this;
     }
 
@@ -624,6 +649,33 @@ public abstract class UnderActivity extends AppCompatActivity {
       appBarLayout = null;
       enableCoordinatorAppBarLayout = true;
       enableToolbar = true;
+      return this;
+    }
+
+    /**
+     * Set Toolbar's background color. This method enable toolbar.
+     *
+     * @param toolbarTabLayoutBackgroundColor Color for toolbar background.
+     * @return builder.
+     */
+    public Builder setToolbarTabLayoutBackgroundColor(@ColorInt Integer toolbarTabLayoutBackgroundColor) {
+      this.toolbarTabLayoutBackgroundColor = toolbarTabLayoutBackgroundColor;
+      enableToolbar = true;
+      enableCoordinatorAppBarLayout = true;
+      enableToolbarTabs = true;
+      return this;
+    }
+
+    /**
+     * Set TabLayout scroll flags. This method enable toolbar, coordinatorAppBarLayout and tabs.
+     * @param tabLayoutScrollFlags Flags for TabLayout's scroll.
+     * @return builder
+     */
+    public Builder setTabLayoutScrollFlags(@ScrollFlags int tabLayoutScrollFlags){
+      this.tabLayoutScrollFlags = tabLayoutScrollFlags;
+      this.enableToolbar = true;
+      this.enableCoordinatorAppBarLayout = true;
+      this.enableToolbarTabs = true;
       return this;
     }
 

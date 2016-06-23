@@ -2,6 +2,7 @@ package com.underlegendz.underactivity;
 
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.ViewGroup;
@@ -65,6 +66,21 @@ class ConfigureToolbar {
           appBarLayoutParams.setScrollFlags(builder.appBarLayoutScrollFlags);
           underActivity.getToolbar().setLayoutParams(appBarLayoutParams);
           appBarLayout.addView(underActivity.getToolbar());
+
+          if(builder.enableToolbarTabs){
+            TabLayout tabLayout = new TabLayout(underActivity);
+            AppBarLayout.LayoutParams appBarLayoutParams_TabLayout =
+                new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            appBarLayoutParams_TabLayout.setScrollFlags(0);
+            tabLayout.setLayoutParams(appBarLayoutParams_TabLayout);
+            if(builder.toolbarTabLayoutBackgroundColor != null){
+              tabLayout.setBackgroundColor(builder.toolbarTabLayoutBackgroundColor);
+            }else if(builder.toolbarBackgroundColor != null){
+              tabLayout.setBackgroundColor(builder.toolbarBackgroundColor);
+            }
+            appBarLayout.addView(tabLayout);
+            underActivity.setTabLayout(tabLayout);
+          }
 
           coordinatorLayoutParams.setBehavior(new AppBarLayout.Behavior());
           appBarLayout.setLayoutParams(coordinatorLayoutParams);
