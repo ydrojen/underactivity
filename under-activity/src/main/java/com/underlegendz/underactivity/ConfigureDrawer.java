@@ -5,7 +5,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 
-public class ConfigureDrawer {
+class ConfigureDrawer {
 
   /**
    * Configure Activity's Drawer.

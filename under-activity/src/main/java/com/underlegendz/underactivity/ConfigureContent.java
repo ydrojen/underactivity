@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import com.underlegendz.library.R;
 
-public class ConfigureContent {
+class ConfigureContent {
 
   static void configureContent(UnderActivity.Builder builder, UnderActivity underActivity) {
     View customLayout;

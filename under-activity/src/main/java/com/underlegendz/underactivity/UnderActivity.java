@@ -163,40 +163,40 @@ public abstract class UnderActivity extends AppCompatActivity {
 
   protected static class Builder {
     // Components enabled
-    protected boolean enableToolbar = false;
-    protected boolean enableDrawer = false;
-    protected boolean enableCoordinatorAppBarLayout = false;
+    boolean enableToolbar = false;
+    boolean enableDrawer = false;
+    boolean enableCoordinatorAppBarLayout = false;
     // Main Content
-    protected View contentLayout = null;
-    protected Integer contentLayoutResource = null;
+    View contentLayout = null;
+    Integer contentLayoutResource = null;
     // Start Drawer
-    protected View drawerCustomLayout = null;
-    protected Integer drawerCustomLayoutResource = null;
-    protected View drawerNavigationViewHeader = null;
-    protected Integer drawerNavigationViewHeaderResource = null;
-    protected Integer drawerNavigationViewMenuResource = null;
-    protected Integer drawerNavigationViewBackgroundColor = null;
-    protected NavigationView.OnNavigationItemSelectedListener drawerOnNavigationItemSelectedListener;
+    View drawerCustomLayout = null;
+    Integer drawerCustomLayoutResource = null;
+    View drawerNavigationViewHeader = null;
+    Integer drawerNavigationViewHeaderResource = null;
+    Integer drawerNavigationViewMenuResource = null;
+    Integer drawerNavigationViewBackgroundColor = null;
+    NavigationView.OnNavigationItemSelectedListener drawerOnNavigationItemSelectedListener;
     // End Drawer
-    protected View endDrawerCustomLayout = null;
-    protected Integer endDrawerCustomLayoutResource = null;
-    protected View endDrawerNavigationViewHeader = null;
-    protected Integer endDrawerNavigationViewHeaderResource = null;
-    protected Integer endDrawerNavigationViewMenuResource = null;
-    protected Integer endDrawerNavigationViewBackgroundColor = null;
-    protected NavigationView.OnNavigationItemSelectedListener endDrawerOnNavigationItemSelectedListener;
+    View endDrawerCustomLayout = null;
+    Integer endDrawerCustomLayoutResource = null;
+    View endDrawerNavigationViewHeader = null;
+    Integer endDrawerNavigationViewHeaderResource = null;
+    Integer endDrawerNavigationViewMenuResource = null;
+    Integer endDrawerNavigationViewBackgroundColor = null;
+    NavigationView.OnNavigationItemSelectedListener endDrawerOnNavigationItemSelectedListener;
     // Toolbar
-    protected Toolbar toolbar = null;
-    protected Integer toolbarResource = null;
-    protected Integer toolbarPopupTheme = null;
-    protected Integer toolbarBackgroundColor = null;
-    protected Integer toolbarDrawerIcon = null;
-    protected Integer toolbarBackIcon = null;
-    protected boolean toolbarBack = false;
+    Toolbar toolbar = null;
+    Integer toolbarResource = null;
+    Integer toolbarPopupTheme = null;
+    Integer toolbarBackgroundColor = null;
+    Integer toolbarDrawerIcon = null;
+    Integer toolbarBackIcon = null;
+    boolean toolbarBack = false;
     // AppBarLayout
-    protected int appBarLayoutScrollFlags = -1;
-    protected AppBarLayout appBarLayout = null;
-    protected Integer appBarLayoutResource = null;
+    int appBarLayoutScrollFlags = -1;
+    AppBarLayout appBarLayout = null;
+    Integer appBarLayoutResource = null;
 
     /**
      * Enable/Disable Toolbar.
@@ -382,7 +382,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @return builder.
      */
     public Builder setEndDrawerCustomLayout(View endDrawerCustomLayout) {
-      this.endDrawerCustomLayout = drawerCustomLayout;
+      this.endDrawerCustomLayout = endDrawerCustomLayout;
       endDrawerCustomLayoutResource = null;
       endDrawerNavigationViewHeader = null;
       endDrawerNavigationViewHeaderResource = null;
@@ -557,7 +557,7 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Enable/disable Toolbar's back icon and back funcionality. This method enable toolbar.
+     * Enable/disable Toolbar's back icon and back functionality. This method enable toolbar.
      *
      * @param toolbarBack enable/disable.
      * @return builder.
@@ -569,7 +569,7 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set Toolbar's back icon and enable back funcionality. This method enable toolbar.
+     * Set Toolbar's back icon and enable back functionality. This method enable toolbar.
      *
      * @param toolbarBackIcon Toolbar's back icon resource.
      * @return builder.
