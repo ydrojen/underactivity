@@ -735,34 +735,28 @@ public abstract class UnderActivity extends AppCompatActivity {
      * set for any of the other flags to take effect. If any sibling views
      * before this one do not have this flag, then this value has no effect.
      */
-    public static final int SCROLL_FLAG_SCROLL = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL;
+    public static final int SCROLL_FLAG_SCROLL = 1;
 
     /**
      * When exiting (scrolling off screen) the view will be scrolled until it is
      * 'collapsed'. The collapsed height is defined by the view's minimum height.
-     *
-     * @see ViewCompat#getMinimumHeight(View)
-     * @see View#setMinimumHeight(int)
      */
-    public static final int SCROLL_FLAG_EXIT_UNTIL_COLLAPSED = AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED;
+    public static final int SCROLL_FLAG_EXIT_UNTIL_COLLAPSED = 1 << 1;
 
     /**
      * When entering (scrolling on screen) the view will scroll on any downwards
      * scroll event, regardless of whether the scrolling view is also scrolling. This
      * is commonly referred to as the 'quick return' pattern.
      */
-    public static final int SCROLL_FLAG_ENTER_ALWAYS = AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS;
+    public static final int SCROLL_FLAG_ENTER_ALWAYS = 1 << 2;
 
     /**
      * An additional flag for 'enterAlways' which modifies the returning view to
      * only initially scroll back to it's collapsed height. Once the scrolling view has
      * reached the end of it's scroll range, the remainder of this view will be scrolled
      * into view. The collapsed height is defined by the view's minimum height.
-     *
-     * @see ViewCompat#getMinimumHeight(View)
-     * @see View#setMinimumHeight(int)
      */
-    public static final int SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED = AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED;
+    public static final int SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED = 1 << 3;
 
     /**
      * Upon a scroll ending, if the view is only partially visible then it will be snapped
@@ -770,6 +764,6 @@ public abstract class UnderActivity extends AppCompatActivity {
      * displayed, it will be scrolled off screen completely. Conversely, if it's bottom 75%
      * is visible then it will be scrolled fully into view.
      */
-    public static final int SCROLL_FLAG_SNAP = AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP;
+    public static final int SCROLL_FLAG_SNAP = 1 << 4;
   }
 }
