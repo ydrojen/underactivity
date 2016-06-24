@@ -63,12 +63,23 @@ class ConfigureToolbar {
 
           AppBarLayout.LayoutParams appBarLayoutParams =
               new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-          appBarLayoutParams.setScrollFlags(builder.appBarLayoutScrollFlags);
+          appBarLayoutParams.setScrollFlags(builder.toolbarScrollFlags);
           underActivity.getToolbar().setLayoutParams(appBarLayoutParams);
           appBarLayout.addView(underActivity.getToolbar());
 
           if(builder.enableToolbarTabs){
-            TabLayout tabLayout = new TabLayout(underActivity);
+            TabLayout tabLayout = null;
+
+            if(builder.tabLayoutResource != null){
+              tabLayout = (TabLayout) underActivity.getLayoutInflater().inflate(builder.tabLayoutResource, underActivity.getContent(), false);
+            } else {
+              tabLayout = builder.tabLayoutView;
+            }
+
+            if(tabLayout == null){
+              tabLayout = new TabLayout(underActivity);
+            }
+
             AppBarLayout.LayoutParams appBarLayoutParams_TabLayout =
                 new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             appBarLayoutParams_TabLayout.setScrollFlags(0);

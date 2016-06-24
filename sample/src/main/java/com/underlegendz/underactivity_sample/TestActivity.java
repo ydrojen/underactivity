@@ -15,11 +15,8 @@ package com.underlegendz.underactivity_sample;
  * limitations under the License.
  */
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.view.View;
-import android.widget.TextView;
 import com.underlegendz.underactivity.UnderActivity;
 
 public class TestActivity extends UnderActivity {
@@ -27,10 +24,10 @@ public class TestActivity extends UnderActivity {
     return builder
         //.setContentLayoutResource(R.layout.custom_layout)
         .enableCoordinatorAppBarLayout(true)
-        .setAppBarLayoutScrollFlags(Builder.SCROLL_FLAG_SCROLL|Builder.SCROLL_FLAG_SNAP|Builder.SCROLL_FLAG_ENTER_ALWAYS)
+        .setToolbarScrollFlags(Builder.SCROLL_FLAG_SCROLL|Builder.SCROLL_FLAG_SNAP|Builder.SCROLL_FLAG_ENTER_ALWAYS)
         .enableToolbarTabs(true)
         .setToolbarBackgroundColor(getResources().getColor(R.color.accentColor))
-        .setDrawerCustomLayoutResource(R.layout.custom_drawer);
+        .setDrawerCustomLayout(R.layout.custom_drawer);
   }
 
   @Override public void onPostCreate(Bundle savedInstanceState) {

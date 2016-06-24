@@ -205,11 +205,13 @@ public abstract class UnderActivity extends AppCompatActivity {
     Integer toolbarBackIcon = null;
     boolean toolbarBack = false;
     // AppBarLayout
-    int appBarLayoutScrollFlags = 0;
+    int toolbarScrollFlags = 0;
     AppBarLayout appBarLayout = null;
     Integer appBarLayoutResource = null;
     Integer toolbarTabLayoutBackgroundColor = null;
     int tabLayoutScrollFlags = 0;
+    TabLayout tabLayoutView = null;
+    Integer tabLayoutResource = null;
 
     /**
      * Enable/Disable Toolbar.
@@ -275,7 +277,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param contentLayoutResource Activity's layout resource.
      * @return builder.
      */
-    public Builder setContentLayoutResource(@LayoutRes Integer contentLayoutResource) {
+    public Builder setContentLayout(@LayoutRes Integer contentLayoutResource) {
       this.contentLayoutResource = contentLayoutResource;
       this.contentLayout = null;
       return this;
@@ -308,7 +310,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param drawerCustomLayoutResource Navigation drawer's layout resource.
      * @return builder.
      */
-    public Builder setDrawerCustomLayoutResource(@LayoutRes Integer drawerCustomLayoutResource) {
+    public Builder setDrawerCustomLayout(@LayoutRes Integer drawerCustomLayoutResource) {
       this.drawerCustomLayoutResource = drawerCustomLayoutResource;
       drawerCustomLayout = null;
       drawerNavigationViewHeader = null;
@@ -342,7 +344,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param drawerNavigationViewHeaderResource NavigationView Header's layout resource.
      * @return builder.
      */
-    public Builder setDrawerNavigationViewHeaderResource(@LayoutRes Integer drawerNavigationViewHeaderResource) {
+    public Builder setDrawerNavigationViewHeader(@LayoutRes Integer drawerNavigationViewHeaderResource) {
       this.drawerNavigationViewHeaderResource = drawerNavigationViewHeaderResource;
       drawerNavigationViewHeader = null;
       drawerCustomLayout = null;
@@ -425,7 +427,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param endDrawerCustomLayoutResource Navigation drawer's layout resource.
      * @return builder.
      */
-    public Builder setEndDrawerCustomLayoutResource(@LayoutRes Integer endDrawerCustomLayoutResource) {
+    public Builder setEndDrawerCustomLayout(@LayoutRes Integer endDrawerCustomLayoutResource) {
       this.endDrawerCustomLayoutResource = endDrawerCustomLayoutResource;
       endDrawerCustomLayout = null;
       endDrawerNavigationViewHeader = null;
@@ -459,7 +461,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param endDrawerNavigationViewHeaderResource NavigationView Header's layout resource.
      * @return builder.
      */
-    public Builder setEndDrawerNavigationViewHeaderResource(@DrawableRes Integer endDrawerNavigationViewHeaderResource) {
+    public Builder setEndDrawerNavigationViewHeader(@DrawableRes Integer endDrawerNavigationViewHeaderResource) {
       this.endDrawerNavigationViewHeaderResource = endDrawerNavigationViewHeaderResource;
       endDrawerNavigationViewHeader = null;
       endDrawerCustomLayout = null;
@@ -516,30 +518,34 @@ public abstract class UnderActivity extends AppCompatActivity {
     }
 
     /**
-     * Set custom Toolbar view. This method overrides any custom toolbar layout resource and
-     * enable toolbar.
+     * Set custom Toolbar view. This method overrides any custom toolbar layout resource,
+     * any AppBarLayout and enable toolbar.
      *
      * @param toolbar Toolbar's view.
      * @return builder.
      */
     public Builder setToolbar(Toolbar toolbar) {
       this.toolbar = toolbar;
-      toolbarResource = null;
-      enableToolbar = true;
+      this.appBarLayoutResource = null;
+      this.appBarLayout = null;
+      this.toolbarResource = null;
+      this.enableToolbar = true;
       return this;
     }
 
     /**
-     * Set custom Toolbar layout resource. This method overrides any custom toolbar view and
-     * enable toolbar.
+     * Set custom Toolbar layout resource. This method overrides any custom toolbar view, any
+     * AppBarLayout and enable toolbar.
      *
      * @param toolbarResource Toolbar's layout resource.
      * @return builder.
      */
-    public Builder setToolbarResource(@LayoutRes Integer toolbarResource) {
+    public Builder setToolbar(@LayoutRes Integer toolbarResource) {
       this.toolbarResource = toolbarResource;
-      toolbar = null;
-      enableToolbar = true;
+      this.toolbar = null;
+      this.appBarLayoutResource = null;
+      this.appBarLayout = null;
+      this.enableToolbar = true;
       return this;
     }
 
@@ -608,11 +614,11 @@ public abstract class UnderActivity extends AppCompatActivity {
 
     /**
      * Set AppBarLayout scroll flags. This method enable toolbar and coordinatorAppBarLayout.
-     * @param appBarLayoutScrollFlags Flags for AppBarLayout's scroll.
+     * @param toolbarScrollFlags Flags for AppBarLayout's scroll.
      * @return builder
      */
-    public Builder setAppBarLayoutScrollFlags(@ScrollFlags int appBarLayoutScrollFlags){
-      this.appBarLayoutScrollFlags = appBarLayoutScrollFlags;
+    public Builder setToolbarScrollFlags(@ScrollFlags int toolbarScrollFlags){
+      this.toolbarScrollFlags = toolbarScrollFlags;
       this.enableToolbar = true;
       this.enableCoordinatorAppBarLayout = true;
       return this;
@@ -642,7 +648,7 @@ public abstract class UnderActivity extends AppCompatActivity {
      * @param appBarLayoutResource Toolbar's layout resource.
      * @return builder.
      */
-    public Builder setAppBarLayoutResource(@LayoutRes Integer appBarLayoutResource) {
+    public Builder setAppBarLayout(@LayoutRes Integer appBarLayoutResource) {
       this.appBarLayoutResource = appBarLayoutResource;
       toolbar = null;
       toolbarResource = null;
@@ -675,6 +681,41 @@ public abstract class UnderActivity extends AppCompatActivity {
       this.tabLayoutScrollFlags = tabLayoutScrollFlags;
       this.enableToolbar = true;
       this.enableCoordinatorAppBarLayout = true;
+      this.enableToolbarTabs = true;
+      return this;
+    }
+
+    /**
+     * Set custom TabLayout view. This method overrides any custom TabLayoutResource or
+     * AppBarLayout and enable toolbar and coordinatorAppBarLayout.
+     *
+     * @param tabLayoutView TabLayout's view.
+     * @return builder.
+     */
+    public Builder setTabLayout(TabLayout tabLayoutView) {
+      this.tabLayoutView = tabLayoutView;
+      this.tabLayoutResource = null;
+      this.appBarLayoutResource = null;
+      this.appBarLayout = null;
+      this.enableToolbar = true;
+      this.enableCoordinatorAppBarLayout = true;
+      this.enableToolbarTabs = true;
+      return this;
+    }
+
+    /**
+     * Set custom TabLayout layout resource. This method overrides any custom TabLayout view or
+     * AppBarLayout and enable toolbar and coordinatorAppBarLayout.
+     *
+     * @param tabLayoutResource TabLayout's layout resource.
+     * @return builder.
+     */
+    public Builder setTabLayout(@LayoutRes Integer tabLayoutResource) {
+      this.tabLayoutResource = tabLayoutResource;
+      this.appBarLayout = null;
+      this.appBarLayoutResource = null;
+      this.enableCoordinatorAppBarLayout = true;
+      this.enableToolbar = true;
       this.enableToolbarTabs = true;
       return this;
     }
