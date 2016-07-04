@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <CheckBox
+      android:id="@+id/toolbar.enable"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/toolbar.enable"
+      android:checked="true"
+      android:layout_alignParentTop="true" />
+
+    <RelativeLayout
+      android:id="@+id/toolbar.configuration_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/toolbar.enable">
+
+    </RelativeLayout>
+
+    <CheckBox
+      android:id="@+id/drawer.enable"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/drawer.enable"
+      android:checked="true"
+      android:layout_below="@+id/toolbar.configuration_container" />
+
+    <LinearLayout
+      android:id="@+id/drawer.configuration_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:layout_below="@+id/drawer.enable">
+
+      <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="8dp">
+        <TextView
+          android:id="@+id/drawer.start.title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/drawer.start"
+          android:layout_alignParentTop="true" />
+
+        <TextView
+          android:id="@+id/drawer.start.type_selector.hint"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/drawer.type"
+          android:layout_below="@+id/drawer.start.title" />
+
+        <android.support.v7.widget.AppCompatSpinner
+          android:id="@+id/drawer.start.type_selector"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/drawer.start.title"
+          android:layout_toRightOf="@+id/drawer.start.type_selector.hint" />
+
+        <CheckBox
+          android:id="@+id/drawer.start.header"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/drawer.header"
+          android:layout_below="@+id/drawer.start.type_selector.hint" />
+
+
+
+        <LinearLayout
+          android:id="@+id/drawer.start.color.container"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/drawer.start.header"
+          android:gravity="center_vertical"
+          android:orientation="horizontal">
+
+          <View
+            android:id="@+id/drawer.start.color"
+            android:layout_height="20dp"
+            android:layout_width="20dp"
+            android:background="@color/primaryDarkColor"/>
+
+          <TextView
+            android:id="@+id/drawer.start.color.hint"
+            android:layout_marginLeft="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/drawer.color" />
+
+        </LinearLayout>
+      </RelativeLayout>
+
+      <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#30000000"/>
+
+      <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="8dp">
+        <TextView
+          android:id="@+id/drawer.end.title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/drawer.end"
+          android:layout_alignParentTop="true" />
+
+        <TextView
+          android:id="@+id/drawer.end.type_selector.hint"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/drawer.type"
+          android:layout_below="@+id/drawer.end.title" />
+
+        <android.support.v7.widget.AppCompatSpinner
+          android:id="@+id/drawer.end.type_selector"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/drawer.end.title"
+          android:layout_toRightOf="@+id/drawer.end.type_selector.hint" />
+
+        <CheckBox
+          android:id="@+id/drawer.end.header"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/drawer.header"
+          android:layout_below="@+id/drawer.end.type_selector.hint" />
+
+        <LinearLayout
+          android:id="@+id/drawer.end.color.container"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@+id/drawer.end.header"
+          android:gravity="center_vertical"
+          android:orientation="horizontal">
+
+          <View
+            android:id="@+id/drawer.end.color"
+            android:layout_height="20dp"
+            android:layout_width="20dp"
+            android:background="@color/accentColor"/>
+
+          <TextView
+            android:id="@+id/drawer.end.color.hint"
+            android:layout_marginLeft="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/drawer.color" />
+
+        </LinearLayout>
+
+        <!-- bg color -->
+      </RelativeLayout>
+
+    </LinearLayout>
+  </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>
