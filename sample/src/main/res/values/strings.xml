@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">Underactivity-sample</string>
+  <string name="app_name">Underactivity Sample</string>
 
   <string name="maincontent_customlayout">Main Content: Custom Layout</string>
   <string name="maincontent_customlayout_text">Hello, I am a simple Activity created from custom layout resource. This is my code:</string>
@@ -82,4 +82,38 @@
   <string name="selector">Navigation Drawer from Resource</string>
 
   <string name="share_url" translatable="false">https://github.com/ydrojen/underactivity</string>
+
+
+  <!-- TEST -->
+  <string name="toolbar.enable">Enable toolbar</string>
+  <string name="drawer.enable">Enable Drawer</string>
+  <string name="drawer.start">"Gravity Start" Drawer</string>
+  <string name="drawer.end">"Gravity End" Drawer</string>
+  <string name="drawer.type">Drawer type</string>
+  <string name="drawer.header">Enable NavigationView Header</string>
+  <string name="background_color">Background color</string>
+  <string name="toolbar.back">Back action</string>
+  <string name="toolbar.scrollflags">Toolbar Scrollflags</string>
+  <string name="tabs.scrollflags">Tabs Scrollflags</string>
+  <string name="toolbar.tabs">Enable tabs</string>
+  <string name="toolbar.tabs.bg">Tabs background color</string>
+  <string name="launch_activity">Launch Activity</string>
+  <string-array name="scroll_flags">
+    <item>none</item>
+    <item>scroll</item>
+    <item>scroll|enterAlways</item>
+  </string-array>
+  <string-array name="drawer_type">
+    <item>None</item>
+    <item>NavigationView</item>
+    <item>Custom Layout</item>
+  </string-array>
+  <!--<string name="coordinator.enable">Enable CoordinatorLayout and AppBarLayout</string>-->
+  <!--<string name="tabs.enable">Enable Tabs in Toolbar</string>-->
+  <!--<string name="content.custom">Custom View/Resource</string>-->
+  <!--<string name="drawer.navigation_view">NavigationView</string>-->
+  <!--<string name="bg_color">Background color</string>-->
+  <!---->
+  <!--<string name="toolbar.back">Enable "Back" navigation</string>-->
+
 </resources>
