@@ -13,7 +13,7 @@ ext {
   siteUrl = 'https://github.com/ydrojen/underactivity'
   gitUrl = 'https://github.com/ydrojen/underactivity.git'
 
-  libraryVersion = '1.1.0'
+  libraryVersion = '1.1.1'
 
   developerId = 'ydrojen'
   developerName = 'Jose Fuentes'
