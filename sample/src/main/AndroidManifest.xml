@@ -9,7 +9,8 @@
     android:name=".Application"
     android:theme="@style/UnderBase">
 
-    <activity android:name=".TestActivity">
+    <activity android:name=".MainActivity"
+      android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
@@ -17,13 +18,6 @@
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
-
-    <activity android:name=".FragmentActivity"/>
-    <activity android:name=".NavigationViewActivity"/>
-    <activity android:name=".NavigationDrawerActivity"/>
-    <activity android:name=".ToolbarActivity"/>
-    <activity android:name=".CustomToolbarActivity"/>
-    <activity android:name=".ToolbarDrawerActivity"/>
 
   </application>
 

@@ -6,7 +6,8 @@
   <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:animateLayoutChanges="true">
 
     <CheckBox
       android:id="@+id/toolbar.enable"
@@ -20,7 +21,104 @@
       android:id="@+id/toolbar.configuration_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/toolbar.enable">
+      android:layout_below="@+id/toolbar.enable"
+      android:layout_marginLeft="16dp"
+      android:animateLayoutChanges="true">
+
+      <LinearLayout
+        android:id="@+id/toolbar.color.container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <View
+          android:id="@+id/toolbar.color"
+          android:layout_height="20dp"
+          android:layout_width="20dp"
+          android:background="@color/primaryDarkColor"/>
+
+        <TextView
+          android:id="@+id/toolbar.color.hint"
+          android:layout_marginLeft="8dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/background_color" />
+
+      </LinearLayout>
+
+      <CheckBox
+        android:id="@+id/toolbar.back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar.color.container"
+        android:text="@string/toolbar.back"
+        android:layout_marginTop="8dp" />
+
+      <TextView
+        android:id="@+id/toolbar.scroll_flags.hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/toolbar.scrollflags"
+        android:layout_below="@+id/toolbar.back"
+        android:layout_marginTop="8dp" />
+
+      <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/toolbar.scroll_flags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar.scroll_flags.hint" />
+
+      <CheckBox
+        android:id="@+id/toolbar.tabs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar.scroll_flags"
+        android:text="@string/toolbar.tabs"
+        android:checked="true"
+        android:layout_marginTop="8dp" />
+
+      <LinearLayout
+        android:id="@+id/toolbar.tabs.color.container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar.tabs"
+        android:layout_marginLeft="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <View
+          android:id="@+id/toolbar.tabs.color"
+          android:layout_height="20dp"
+          android:layout_width="20dp"
+          android:background="@color/primaryDarkColor"/>
+
+        <TextView
+          android:id="@+id/toolbar.tabs.color.hint"
+          android:layout_marginLeft="8dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/toolbar.tabs.bg"/>
+
+      </LinearLayout>
+
+      <TextView
+        android:id="@+id/toolbar.tabs.scroll_flags.hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tabs.scrollflags"
+        android:layout_below="@+id/toolbar.tabs.color.container"
+        android:layout_marginTop="8dp" />
+
+      <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/toolbar.tabs.scroll_flags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar.tabs.scroll_flags.hint" />
 
     </RelativeLayout>
 
@@ -30,6 +128,7 @@
       android:layout_height="wrap_content"
       android:text="@string/drawer.enable"
       android:checked="true"
+      android:layout_marginTop="16dp"
       android:layout_below="@+id/toolbar.configuration_container" />
 
     <LinearLayout
@@ -37,18 +136,21 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
+      android:layout_marginLeft="16dp"
       android:layout_below="@+id/drawer.enable">
 
       <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:animateLayoutChanges="true">
         <TextView
           android:id="@+id/drawer.start.title"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/drawer.start"
+          android:textSize="16sp"
           android:layout_alignParentTop="true" />
 
         <TextView
@@ -56,23 +158,23 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/drawer.type"
-          android:layout_below="@+id/drawer.start.title" />
+          android:layout_below="@+id/drawer.start.title"
+          android:layout_marginTop="16dp" />
 
         <android.support.v7.widget.AppCompatSpinner
           android:id="@+id/drawer.start.type_selector"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/drawer.start.title"
-          android:layout_toRightOf="@+id/drawer.start.type_selector.hint" />
+          android:layout_below="@+id/drawer.start.type_selector.hint" />
 
         <CheckBox
           android:id="@+id/drawer.start.header"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/drawer.header"
-          android:layout_below="@+id/drawer.start.type_selector.hint" />
-
-
+          android:layout_below="@+id/drawer.start.type_selector"
+          android:layout_marginTop="8dp"
+          android:visibility="gone" />
 
         <LinearLayout
           android:id="@+id/drawer.start.color.container"
@@ -80,7 +182,10 @@
           android:layout_height="wrap_content"
           android:layout_below="@+id/drawer.start.header"
           android:gravity="center_vertical"
-          android:orientation="horizontal">
+          android:layout_marginLeft="8dp"
+          android:orientation="horizontal"
+          android:layout_marginTop="8dp"
+          android:visibility="gone">
 
           <View
             android:id="@+id/drawer.start.color"
@@ -93,7 +198,7 @@
             android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/drawer.color" />
+            android:text="@string/background_color" />
 
         </LinearLayout>
       </RelativeLayout>
@@ -107,12 +212,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:animateLayoutChanges="true">
         <TextView
           android:id="@+id/drawer.end.title"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/drawer.end"
+          android:textSize="16sp"
           android:layout_alignParentTop="true" />
 
         <TextView
@@ -120,21 +227,23 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/drawer.type"
-          android:layout_below="@+id/drawer.end.title" />
+          android:layout_below="@+id/drawer.end.title"
+          android:layout_marginTop="16dp" />
 
         <android.support.v7.widget.AppCompatSpinner
           android:id="@+id/drawer.end.type_selector"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_below="@+id/drawer.end.title"
-          android:layout_toRightOf="@+id/drawer.end.type_selector.hint" />
+          android:layout_below="@+id/drawer.end.type_selector.hint" />
 
         <CheckBox
           android:id="@+id/drawer.end.header"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/drawer.header"
-          android:layout_below="@+id/drawer.end.type_selector.hint" />
+          android:layout_below="@+id/drawer.end.type_selector"
+          android:layout_marginTop="8dp"
+          android:visibility="gone" />
 
         <LinearLayout
           android:id="@+id/drawer.end.color.container"
@@ -142,7 +251,10 @@
           android:layout_height="wrap_content"
           android:layout_below="@+id/drawer.end.header"
           android:gravity="center_vertical"
-          android:orientation="horizontal">
+          android:layout_marginLeft="8dp"
+          android:orientation="horizontal"
+          android:layout_marginTop="8dp"
+          android:visibility="gone">
 
           <View
             android:id="@+id/drawer.end.color"
@@ -155,14 +267,21 @@
             android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/drawer.color" />
+            android:text="@string/background_color" />
 
         </LinearLayout>
-
-        <!-- bg color -->
       </RelativeLayout>
 
     </LinearLayout>
+
+    <Button
+      android:id="@+id/launch"
+      android:layout_width="200dp"
+      android:layout_height="wrap_content"
+      android:text="@string/launch_activity"
+      android:layout_centerHorizontal="true"
+      android:layout_below="@+id/drawer.configuration_container"
+      android:layout_marginTop="16dp" />
   </RelativeLayout>
 
 </android.support.v4.widget.NestedScrollView>

@@ -5,6 +5,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -35,9 +36,11 @@ class ConfigureToolbar {
         }
         underActivity.getContent().addView(appBarLayout);
         for (int i = 0; i < appBarLayout.getChildCount(); i++) {
-          if (appBarLayout.getChildAt(i) instanceof Toolbar) {
-            underActivity.setToolbar((Toolbar) appBarLayout.getChildAt(i));
-            break;
+          View childView = appBarLayout.getChildAt(i);
+          if (childView instanceof Toolbar) {
+            underActivity.setToolbar((Toolbar) childView);
+          }else if(childView instanceof TabLayout){
+            underActivity.setTabLayout((TabLayout) childView);
           }
         }
       } else {
