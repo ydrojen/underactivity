@@ -23,6 +23,8 @@ class ConfigureDrawer {
         drawerCustomLayout = builder.drawerCustomLayout;
       }
 
+      drawerCustomLayout.setFitsSystemWindows(true); //TODO
+
       DrawerLayout.LayoutParams lp = underActivity.getDrawerLayoutParams();
       lp.gravity = GravityCompat.START;
       if (drawerCustomLayout != null) { // CustomView

@@ -1,5 +1,5 @@
 package com.underlegendz.underactivity_sample;
-/*
+/**
  * Copyright (C) 2016 Jose Fuentes
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,9 +26,15 @@ import android.widget.TextView;
 
 public class RecyclerFragment extends android.support.v4.app.Fragment {
 
-  final String[] list = {"Item 1","Item 2","Item 3","Item 4","Item 5","Item 6","Item 7","Item 8",
-      "Item 9","Item 10","Item 11","Item 12","Item 13","Item 14","Item 15","Item 16","Item 17",
-      "Item 18","Item 19","Item 20"};
+  public static RecyclerFragment newInstance() {
+    Bundle args = new Bundle();
+    RecyclerFragment fragment = new RecyclerFragment();
+    fragment.setArguments(args);
+    return fragment;
+  }
+
+  static final int SIZE = 50;
+
   @Nullable
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
@@ -43,12 +49,12 @@ public class RecyclerFragment extends android.support.v4.app.Fragment {
 
       @Override
       public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((ViewHolder) holder).text.setText(list[position]);
+        ((ViewHolder) holder).text.setText("Data - "+position);
       }
 
       @Override
       public int getItemCount() {
-        return list.length;
+        return SIZE;
       }
     });
 

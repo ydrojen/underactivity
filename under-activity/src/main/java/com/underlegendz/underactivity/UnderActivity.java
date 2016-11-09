@@ -9,6 +9,7 @@ import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -24,13 +25,15 @@ import android.view.ViewGroup;
 import com.underlegendz.library.R;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.UUID;
 
 public abstract class UnderActivity extends AppCompatActivity {
 
-  private final String DEFAULT_TAG = "main_content";
+  private final String DEFAULT_TAG = UUID.randomUUID().toString();
 
   // Layout views
   private DrawerLayout mDrawerLayout;
+  private CoordinatorLayout mCoordinatorLayout;
 
   // Components Views
   private ViewGroup mContent;
@@ -48,8 +51,13 @@ public abstract class UnderActivity extends AppCompatActivity {
     Builder builder = new Builder();
     builder = configureActivityBuilder(builder);
 
+    setContentView(R.layout.underactivity);
+    mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.underactivity_coordinator);
+
     mDrawerLayout = new DrawerLayout(this);
-    setContentView(mDrawerLayout);
+    mDrawerLayout.setLayoutParams(getCoordinatorLayoutParams());
+    mDrawerLayout.setFitsSystemWindows(true); //TODO
+    mCoordinatorLayout.addView(mDrawerLayout);
 
     ConfigureDrawer.configureDrawer(builder, this);
     ConfigureToolbar.configureToolbar(builder, this);
@@ -59,8 +67,15 @@ public abstract class UnderActivity extends AppCompatActivity {
   @NonNull
   DrawerLayout.LayoutParams getDrawerLayoutParams() {
     return new DrawerLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT);
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT);
+  }
+
+  @NonNull
+  CoordinatorLayout.LayoutParams getCoordinatorLayoutParams() {
+    return new CoordinatorLayout.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT);
   }
 
   /**

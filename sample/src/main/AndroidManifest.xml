@@ -7,7 +7,7 @@
     android:label="@string/app_name"
     android:supportsRtl="true"
     android:name=".Application"
-    android:theme="@style/UnderBase">
+    android:theme="@style/AppTheme">
 
     <activity android:name=".MainActivity"
       android:screenOrientation="portrait">

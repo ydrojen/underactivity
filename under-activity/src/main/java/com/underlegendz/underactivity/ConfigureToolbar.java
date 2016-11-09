@@ -20,8 +20,9 @@ class ConfigureToolbar {
     if (builder.enableCoordinatorAppBarLayout) {
       underActivity.setContent(new CoordinatorLayout(underActivity));
     } else {
-      underActivity.setContent(new LinearLayout(underActivity));
-      ((LinearLayout) underActivity.getContent()).setOrientation(LinearLayout.VERTICAL);
+      LinearLayout content = new LinearLayout(underActivity);
+      underActivity.setContent(content);
+      content.setOrientation(LinearLayout.VERTICAL);
     }
     underActivity.getContent().setLayoutParams(underActivity.getDrawerLayoutParams());
     underActivity.getDrawerLayout().addView(underActivity.getContent(), 0);
