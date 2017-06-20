@@ -1,5 +1,6 @@
 package com.underlegendz.underactivity;
 
+import android.app.Activity;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
@@ -9,25 +10,24 @@ import com.underlegendz.library.R;
 
 class ConfigureContent {
 
-  static void configureContent(UnderActivity.Builder builder, UnderActivity underActivity) {
+  static void configureContent(ActivityBuilder builder, Activity activity, ViewGroup content) {
     View customLayout;
     if (builder.contentLayoutResource != null) {
-      customLayout = underActivity.getLayoutInflater()
-          .inflate(builder.contentLayoutResource, underActivity.getContent(), false);
+      customLayout = activity.getLayoutInflater()
+          .inflate(builder.contentLayoutResource, content, false);
     } else {
       customLayout = builder.contentLayout;
     }
     if (customLayout != null) {
-      //mCoordinatorLayout.removeView(mMainContent);
-      underActivity.getContent().addView(customLayout);
+      content.addView(customLayout);
       ViewGroup.LayoutParams layoutParams = customLayout.getLayoutParams();
       layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
       layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
     } else {
-      FrameLayout content = new FrameLayout(underActivity);
-      content.setId(R.id.main_content);
-      underActivity.getContent().addView(content);
-      ViewGroup.LayoutParams layoutParams = content.getLayoutParams();
+      FrameLayout container = new FrameLayout(activity);
+      container.setId(R.id.main_content);
+      content.addView(container);
+      ViewGroup.LayoutParams layoutParams = container.getLayoutParams();
       layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
       layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
       if (builder.enableCoordinatorAppBarLayout) {
