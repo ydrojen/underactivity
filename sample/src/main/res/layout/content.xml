@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Created by Jose Fuentes on 9/12/17 17:31
+  ~ Created by Jose Fuentes on 9/12/17 21:02
   ~ Copyright (C) 2017
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License"),
@@ -15,14 +16,11 @@
   ~ limitations under the License.
   -->
 
-<resources>
-  <string name="app_name">Underactivity Sample</string>
-
-  <string name="sample_option">Sample option</string>
-  <string name="sample_action">Sample action</string>
-  <string name="share">Share</string>
-  <string name="share_link">UnderActivity, the library with which you can easily configure multiple parts of modern activities (drawer, toolbar, tabs…)
-    \nhttps://github.com/ydrojen/underactivity</string>
-  <string name="content">Content</string>
-
-</resources>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:id="@+id/sample_tutorial_text"
+  android:text="@string/content"
+  android:textSize="32sp"
+  android:gravity="center"
+  android:textColor="@color/secondary_text"/>

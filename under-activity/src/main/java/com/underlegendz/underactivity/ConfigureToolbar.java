@@ -1,3 +1,20 @@
+/*
+ * Created by Jose Fuentes on 9/12/17 17:31
+ * Copyright (C) 2017
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"),
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.underlegendz.underactivity;
 
 import android.support.design.widget.AppBarLayout;
@@ -17,7 +34,8 @@ class ConfigureToolbar {
    *
    * @param builder Activity build configuration.
    */
-  static void configureToolbar(ActivityBuilder builder, AppCompatActivity activity, ViewGroup content) {
+  static void configureToolbar(ActivityBuilder builder, AppCompatActivity activity,
+      ViewGroup content) {
 
     Toolbar toolbarView = null;
 
@@ -28,7 +46,7 @@ class ConfigureToolbar {
             .inflate(builder.appBarLayoutResource, content, false);
       }
       content.addView(appBarLayout);
-      if(activity instanceof UnderActivityBind) {
+      if (activity instanceof UnderActivityBind) {
         for (int i = 0; i < appBarLayout.getChildCount(); i++) {
           View childView = appBarLayout.getChildAt(i);
           if (childView instanceof Toolbar) {
@@ -41,8 +59,8 @@ class ConfigureToolbar {
       }
     } else {
       if (builder.toolbarResource != null) {
-        toolbarView = (Toolbar) activity.getLayoutInflater()
-            .inflate(builder.toolbarResource, content, false);
+        toolbarView =
+            (Toolbar) activity.getLayoutInflater().inflate(builder.toolbarResource, content, false);
       } else {
         toolbarView = builder.toolbar;
       }
@@ -50,65 +68,57 @@ class ConfigureToolbar {
       if (toolbarView == null) {
         toolbarView = new Toolbar(activity);
       }
-      if (activity instanceof UnderActivityBind){
+      if (activity instanceof UnderActivityBind) {
         ((UnderActivityBind) activity).bindToolbar(toolbarView);
       }
 
-      if (builder.enableCoordinatorAppBarLayout) {
-        AppBarLayout appBarLayout = new AppBarLayout(activity);
-        CoordinatorLayout.LayoutParams coordinatorLayoutParams =
-            new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        appBarLayout.setLayoutParams(coordinatorLayoutParams);
+      AppBarLayout appBarLayout = new AppBarLayout(activity);
+      CoordinatorLayout.LayoutParams coordinatorLayoutParams =
+          new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+              ViewGroup.LayoutParams.WRAP_CONTENT);
+      appBarLayout.setLayoutParams(coordinatorLayoutParams);
 
-        AppBarLayout.LayoutParams appBarLayoutParams =
-            new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        appBarLayoutParams.setScrollFlags(builder.toolbarScrollFlags);
-        toolbarView.setLayoutParams(appBarLayoutParams);
-        appBarLayout.addView(toolbarView);
+      AppBarLayout.LayoutParams appBarLayoutParams =
+          new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+              ViewGroup.LayoutParams.WRAP_CONTENT);
+      appBarLayoutParams.setScrollFlags(builder.toolbarScrollFlags);
+      toolbarView.setLayoutParams(appBarLayoutParams);
+      appBarLayout.addView(toolbarView);
 
-        if (builder.enableToolbarTabs) {
-          TabLayout tabLayout = null;
+      if (builder.enableToolbarTabs) {
+        TabLayout tabLayout = null;
 
-          if (builder.tabLayoutResource != null) {
-            tabLayout = (TabLayout) activity.getLayoutInflater()
-                .inflate(builder.tabLayoutResource, content, false);
-          } else {
-            tabLayout = builder.tabLayoutView;
-          }
-
-          if (tabLayout == null) {
-            tabLayout = new TabLayout(activity);
-          }
-
-          AppBarLayout.LayoutParams appBarLayoutParams_TabLayout =
-              new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                  ViewGroup.LayoutParams.WRAP_CONTENT);
-          appBarLayoutParams_TabLayout.setScrollFlags(0);
-          tabLayout.setLayoutParams(appBarLayoutParams_TabLayout);
-          if (builder.toolbarTabLayoutBackgroundColor != null) {
-            tabLayout.setBackgroundColor(builder.toolbarTabLayoutBackgroundColor);
-          } else if (builder.toolbarBackgroundColor != null) {
-            tabLayout.setBackgroundColor(builder.toolbarBackgroundColor);
-          }
-          appBarLayout.addView(tabLayout);
-
-          if(activity instanceof UnderActivityBind){
-            ((UnderActivityBind) activity).bindTabLayout(tabLayout);
-          }
+        if (builder.tabLayoutResource != null) {
+          tabLayout = (TabLayout) activity.getLayoutInflater()
+              .inflate(builder.tabLayoutResource, content, false);
+        } else {
+          tabLayout = builder.tabLayoutView;
         }
 
-        coordinatorLayoutParams.setBehavior(new AppBarLayout.Behavior());
-        appBarLayout.setLayoutParams(coordinatorLayoutParams);
-        content.addView(appBarLayout, 0);
-      } else {
-        LinearLayout.LayoutParams linearLayoutParams =
-            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        if (tabLayout == null) {
+          tabLayout = new TabLayout(activity);
+        }
+
+        AppBarLayout.LayoutParams appBarLayoutParams_TabLayout =
+            new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        toolbarView.setLayoutParams(linearLayoutParams);
-        content.addView(toolbarView);
+        appBarLayoutParams_TabLayout.setScrollFlags(0);
+        tabLayout.setLayoutParams(appBarLayoutParams_TabLayout);
+        if (builder.toolbarTabLayoutBackgroundColor != null) {
+          tabLayout.setBackgroundColor(builder.toolbarTabLayoutBackgroundColor);
+        } else if (builder.toolbarBackgroundColor != null) {
+          tabLayout.setBackgroundColor(builder.toolbarBackgroundColor);
+        }
+        appBarLayout.addView(tabLayout);
+
+        if (activity instanceof UnderActivityBind) {
+          ((UnderActivityBind) activity).bindTabLayout(tabLayout);
+        }
       }
+
+      coordinatorLayoutParams.setBehavior(new AppBarLayout.Behavior());
+      appBarLayout.setLayoutParams(coordinatorLayoutParams);
+      content.addView(appBarLayout, 0);
     }
 
     if (toolbarView != null) {
@@ -117,6 +127,9 @@ class ConfigureToolbar {
       }
       if (builder.toolbarBackgroundColor != null) {
         toolbarView.setBackgroundColor(builder.toolbarBackgroundColor);
+      }
+      if (builder.toolbarTitleColor != null) {
+        toolbarView.setTitleTextColor(builder.toolbarTitleColor);
       }
 
       activity.setSupportActionBar(toolbarView);
@@ -128,7 +141,7 @@ class ConfigureToolbar {
             ab.setHomeAsUpIndicator(builder.toolbarBackIcon);
           }
           ab.setDisplayHomeAsUpEnabled(true);
-          if(activity instanceof UnderActivityBind){
+          if (activity instanceof UnderActivityBind) {
             ((UnderActivityBind) activity).goBackOnHome(true);
           }
         } else if (builder.toolbarDrawerIcon != null) {

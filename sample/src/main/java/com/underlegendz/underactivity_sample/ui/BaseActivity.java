@@ -1,5 +1,5 @@
 /*
- * Created by Jose Fuentes on 9/12/17 17:31
+ * Created by Jose Fuentes on 9/12/17 21:08
  * Copyright (C) 2017
  *
  * Licensed under the Apache License, Version 2.0 (the "License"),
@@ -15,16 +15,18 @@
  * limitations under the License.
  */
 
-package com.underlegendz.underactivity_sample;
+package com.underlegendz.underactivity_sample.ui;
 
-import com.facebook.stetho.Stetho;
+import android.graphics.Color;
+import android.os.Bundle;
+import com.underlegendz.underactivity.ActivityBuilder;
+import com.underlegendz.underactivity.UnderActivity;
 
-public class Application extends android.app.Application {
+public class BaseActivity extends UnderActivity {
 
   @Override
-  public void onCreate() {
-    super.onCreate();
-
-    Stetho.initializeWithDefaults(this);
+  protected ActivityBuilder configureActivityBuilder(ActivityBuilder builder) {
+    return builder.enableToolbar(true)
+        .setToolbarTitleColor(Color.WHITE);
   }
 }

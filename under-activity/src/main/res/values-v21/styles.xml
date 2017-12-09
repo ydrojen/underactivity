@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-  <style name="UnderBase.NavigationDrawer" parent="UnderBase">
-    <item name="android:windowTranslucentStatus">true</item>
-    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-    <item name="android:statusBarColor">@color/status_bar_color</item>
-    <item name="android:navigationBarColor">@color/navigation_bar_color</item>
-  </style>
-</resources>

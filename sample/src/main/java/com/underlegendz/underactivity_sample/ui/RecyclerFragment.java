@@ -1,12 +1,12 @@
-package com.underlegendz.underactivity_sample;
-/**
- * Copyright (C) 2016 Jose Fuentes
+/*
+ * Created by Jose Fuentes on 9/12/17 19:37
+ * Copyright (C) 2017
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License"),
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,6 +14,8 @@ package com.underlegendz.underactivity_sample;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package com.underlegendz.underactivity_sample.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.underlegendz.underactivity_sample.R;
 
 public class RecyclerFragment extends android.support.v4.app.Fragment {
 
@@ -39,12 +42,12 @@ public class RecyclerFragment extends android.support.v4.app.Fragment {
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View v = inflater.inflate(R.layout.recycler, container, false);
-    RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler);
+    RecyclerView recyclerView = v.findViewById(R.id.recycler);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setAdapter(new RecyclerView.Adapter() {
       @Override
       public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_sample, parent, false));
       }
 
       @Override
