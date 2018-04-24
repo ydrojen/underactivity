@@ -17,6 +17,12 @@ class ConfigureToolbar {
    * @param builder Activity build configuration.
    */
   static void configureToolbar(UnderActivity.Builder builder, UnderActivity underActivity) {
+    if (builder.toolbarTopViewResource != null) {
+      builder.toolbarTopView = underActivity.getLayoutInflater()
+          .inflate(builder.toolbarTopViewResource, underActivity.getContent(), false);
+      builder.toolbarTopViewResource = null;
+    }
+
     if (builder.enableCoordinatorAppBarLayout) {
       underActivity.setContent(new CoordinatorLayout(underActivity));
     } else {
@@ -39,7 +45,7 @@ class ConfigureToolbar {
           View childView = appBarLayout.getChildAt(i);
           if (childView instanceof Toolbar) {
             underActivity.setToolbar((Toolbar) childView);
-          }else if(childView instanceof TabLayout){
+          } else if (childView instanceof TabLayout) {
             underActivity.setTabLayout((TabLayout) childView);
           }
         }
@@ -61,35 +67,42 @@ class ConfigureToolbar {
         if (builder.enableCoordinatorAppBarLayout) {
           AppBarLayout appBarLayout = new AppBarLayout(underActivity);
           CoordinatorLayout.LayoutParams coordinatorLayoutParams =
-              new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+              new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                  ViewGroup.LayoutParams.WRAP_CONTENT);
           appBarLayout.setLayoutParams(coordinatorLayoutParams);
 
           AppBarLayout.LayoutParams appBarLayoutParams =
-              new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+              new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                  ViewGroup.LayoutParams.WRAP_CONTENT);
           appBarLayoutParams.setScrollFlags(builder.toolbarScrollFlags);
           underActivity.getToolbar().setLayoutParams(appBarLayoutParams);
+          if (builder.toolbarTopView != null) {
+            appBarLayout.addView(builder.toolbarTopView);
+          }
           appBarLayout.addView(underActivity.getToolbar());
 
-          if(builder.enableToolbarTabs){
+          if (builder.enableToolbarTabs) {
             TabLayout tabLayout = null;
 
-            if(builder.tabLayoutResource != null){
-              tabLayout = (TabLayout) underActivity.getLayoutInflater().inflate(builder.tabLayoutResource, underActivity.getContent(), false);
+            if (builder.tabLayoutResource != null) {
+              tabLayout = (TabLayout) underActivity.getLayoutInflater()
+                  .inflate(builder.tabLayoutResource, underActivity.getContent(), false);
             } else {
               tabLayout = builder.tabLayoutView;
             }
 
-            if(tabLayout == null){
+            if (tabLayout == null) {
               tabLayout = new TabLayout(underActivity);
             }
 
             AppBarLayout.LayoutParams appBarLayoutParams_TabLayout =
-                new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
             appBarLayoutParams_TabLayout.setScrollFlags(0);
             tabLayout.setLayoutParams(appBarLayoutParams_TabLayout);
-            if(builder.toolbarTabLayoutBackgroundColor != null){
+            if (builder.toolbarTabLayoutBackgroundColor != null) {
               tabLayout.setBackgroundColor(builder.toolbarTabLayoutBackgroundColor);
-            }else if(builder.toolbarBackgroundColor != null){
+            } else if (builder.toolbarBackgroundColor != null) {
               tabLayout.setBackgroundColor(builder.toolbarBackgroundColor);
             }
             appBarLayout.addView(tabLayout);
@@ -101,8 +114,10 @@ class ConfigureToolbar {
           underActivity.getContent().addView(appBarLayout, 0);
         } else {
           LinearLayout.LayoutParams linearLayoutParams =
-              new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+              new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                  ViewGroup.LayoutParams.WRAP_CONTENT);
           underActivity.getToolbar().setLayoutParams(linearLayoutParams);
+          underActivity.getContent().addView(builder.toolbarTopView);
           underActivity.getContent().addView(underActivity.getToolbar());
         }
       }

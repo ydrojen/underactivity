@@ -7,4 +7,5 @@
   <color name="primaryDarkColor">#455A64</color>
   <color name="primaryColor">#607D8B</color>
   <color name="accentColor">#FFC107</color>
+  <color name="toolbarColor">#fff176</color>
 </resources>

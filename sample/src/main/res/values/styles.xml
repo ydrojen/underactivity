@@ -1,6 +1,6 @@
 <resources>
 
   <!-- Base application theme. -->
-  <style name="AppTheme" parent="UnderBase.NavigationDrawer"/>
+  <style name="AppTheme" parent="UnderBase"/>
 
 </resources>

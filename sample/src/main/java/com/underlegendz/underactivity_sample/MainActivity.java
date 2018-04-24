@@ -41,16 +41,18 @@ public class MainActivity extends UnderActivity {
 
   @Override
   protected Builder configureActivityBuilder(Builder builder) {
-    return builder.setContentLayout(R.layout.main)
+    return builder.setContentLayout(R.layout.empty)
         .enableToolbar(true)
-        .setToolbarBackgroundColor(getResources().getColor(R.color.primaryColor));
+        .setToolbarTopViewResource(R.layout.top_view)
+        .setToolbarScrollFlags(Builder.SCROLL_FLAG_SCROLL|Builder.SCROLL_FLAG_ENTER_ALWAYS)
+        .setToolbarBackgroundColor(getResources().getColor(R.color.accentColor));
   }
 
   @Override
   public void onPostCreate(Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
-    bindActivity();
-    initializeActivity();
+    //bindActivity();
+    //initializeActivity();
   }
 
   private void bindActivity() {

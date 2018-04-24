@@ -199,6 +199,8 @@ public abstract class UnderActivity extends AppCompatActivity {
     // Toolbar
     Toolbar toolbar = null;
     Integer toolbarResource = null;
+    Integer toolbarTopViewResource = null;
+    View toolbarTopView = null;
     Integer toolbarPopupTheme = null;
     Integer toolbarBackgroundColor = null;
     Integer toolbarDrawerIcon = null;
@@ -212,6 +214,18 @@ public abstract class UnderActivity extends AppCompatActivity {
     int tabLayoutScrollFlags = 0;
     TabLayout tabLayoutView = null;
     Integer tabLayoutResource = null;
+
+    public Builder setToolbarTopView(View toolbarTopView){
+      this.toolbarTopView = toolbarTopView;
+      this.toolbarTopViewResource = null;
+      return this;
+    }
+
+    public Builder setToolbarTopViewResource(@LayoutRes Integer toolbarTopViewResource){
+      this.toolbarTopView = null;
+      this.toolbarTopViewResource = toolbarTopViewResource;
+      return this;
+    }
 
     /**
      * Enable/Disable Toolbar.
