@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.underlegendz.underactivity_sample.ui;
+package com.underlegendz.underactivity_sample.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.underlegendz.underactivity.ActivityBuilder;
 import com.underlegendz.underactivity_sample.R;
+import com.underlegendz.underactivity_sample.ui.BaseActivity;
 
 public class NavigationViewActivity extends BaseActivity
     implements NavigationView.OnNavigationItemSelectedListener {

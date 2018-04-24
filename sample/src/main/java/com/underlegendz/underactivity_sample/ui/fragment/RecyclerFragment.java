@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.underlegendz.underactivity_sample.ui;
+package com.underlegendz.underactivity_sample.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

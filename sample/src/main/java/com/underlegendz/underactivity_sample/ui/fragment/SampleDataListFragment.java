@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.underlegendz.underactivity_sample.ui;
+package com.underlegendz.underactivity_sample.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.underlegendz.underactivity_sample.R;
+import com.underlegendz.underactivity_sample.ui.adapter.SampleDataAdapter;
 
 public class SampleDataListFragment extends android.support.v4.app.Fragment {
 

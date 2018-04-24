@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.underlegendz.underactivity_sample.ui;
+package com.underlegendz.underactivity_sample.ui.adapter;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;

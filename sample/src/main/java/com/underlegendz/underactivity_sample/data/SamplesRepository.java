@@ -18,15 +18,24 @@
 package com.underlegendz.underactivity_sample.data;
 
 import com.underlegendz.underactivity_sample.R;
-import com.underlegendz.underactivity_sample.ui.CustomDrawerActivity;
-import com.underlegendz.underactivity_sample.ui.NavigationViewActivity;
+import com.underlegendz.underactivity_sample.ui.activity.CustomDrawerActivity;
+import com.underlegendz.underactivity_sample.ui.activity.NavigationViewActivity;
+import com.underlegendz.underactivity_sample.ui.activity.NoExtendsActivity;
 import java.util.LinkedList;
 import java.util.List;
 
 public class SamplesRepository {
 
-  public static List<Sample> getSamples(){
+  public static List<Sample> getSamples() {
     List<Sample> sampleList = new LinkedList<>();
+
+    // No extends activity
+    sampleList.add(new Sample()
+        .setTitle("No extends Activity")
+        .setDescription("Apply ActivityBuilder in an Activity without UnderActivity extension")
+        .setDestinationActivity(NoExtendsActivity.class)
+        .setImageResource(R.drawable.ic_settings_black_24dp)
+    );
 
     // Navigation Drawer
     sampleList.add(new Sample()

@@ -15,10 +15,12 @@
  * limitations under the License.
  */
 
-package com.underlegendz.underactivity_sample.ui;
+package com.underlegendz.underactivity_sample.ui.activity;
 
 import android.os.Bundle;
 import com.underlegendz.underactivity.ActivityBuilder;
+import com.underlegendz.underactivity_sample.ui.BaseActivity;
+import com.underlegendz.underactivity_sample.ui.fragment.SampleDataListFragment;
 
 public class MainActivity extends BaseActivity {
 

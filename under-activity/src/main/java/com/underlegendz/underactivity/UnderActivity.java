@@ -40,7 +40,7 @@ public abstract class UnderActivity extends AppCompatActivity implements UnderAc
   private Toolbar mToolbar;
   private TabLayout mTabLayout;
 
-  private boolean goBackOnHome;
+  private boolean mGoBackOnHome;
 
   /**
    * Create Activity.
@@ -105,7 +105,7 @@ public abstract class UnderActivity extends AppCompatActivity implements UnderAc
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case android.R.id.home:
-        if (goBackOnHome) {
+        if (mGoBackOnHome) {
           onBackPressed();
           return true;
         }
@@ -153,12 +153,12 @@ public abstract class UnderActivity extends AppCompatActivity implements UnderAc
   }
 
   boolean isGoBackOnHome() {
-    return goBackOnHome;
+    return mGoBackOnHome;
   }
 
   @Override
   public void goBackOnHome(boolean back) {
-    this.goBackOnHome = back;
+    this.mGoBackOnHome = back;
   }
 
   protected abstract ActivityBuilder configureActivityBuilder(ActivityBuilder builder);

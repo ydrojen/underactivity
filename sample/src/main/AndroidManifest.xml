@@ -26,7 +26,7 @@
     android:name=".Application"
     android:theme="@style/AppTheme">
 
-    <activity android:name=".ui.MainActivity"
+    <activity android:name=".ui.activity.MainActivity"
       android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -36,10 +36,13 @@
       </intent-filter>
     </activity>
 
-    <activity android:name=".ui.NavigationViewActivity"
+    <activity android:name=".ui.activity.NavigationViewActivity"
       android:screenOrientation="portrait"/>
 
-    <activity android:name=".ui.CustomDrawerActivity"
+    <activity android:name=".ui.activity.CustomDrawerActivity"
+      android:screenOrientation="portrait"/>
+
+    <activity android:name=".ui.activity.NoExtendsActivity"
       android:screenOrientation="portrait"/>
 
   </application>
