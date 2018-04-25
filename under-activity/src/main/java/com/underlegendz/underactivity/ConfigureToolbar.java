@@ -117,7 +117,9 @@ class ConfigureToolbar {
               new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                   ViewGroup.LayoutParams.WRAP_CONTENT);
           underActivity.getToolbar().setLayoutParams(linearLayoutParams);
-          underActivity.getContent().addView(builder.toolbarTopView);
+          if(builder.toolbarTopView != null){
+            underActivity.getContent().addView(builder.toolbarTopView);
+          }
           underActivity.getContent().addView(underActivity.getToolbar());
         }
       }
