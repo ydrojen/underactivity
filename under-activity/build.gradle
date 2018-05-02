@@ -1,3 +1,20 @@
+/*
+ * Created by Jose Fuentes on 9/12/17 17:31
+ * Copyright (C) 2017
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"),
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 apply plugin: 'com.android.library'
 
 ext {
@@ -13,7 +30,7 @@ ext {
   siteUrl = 'https://github.com/ydrojen/underactivity'
   gitUrl = 'https://github.com/ydrojen/underactivity.git'
 
-  libraryVersion = '1.0.1-beta2'
+  libraryVersion = '2.0.1'
 
   developerId = 'ydrojen'
   developerName = 'Jose Fuentes'
@@ -25,12 +42,12 @@ ext {
 }
 
 android {
-  compileSdkVersion 23
-  buildToolsVersion "23.0.1"
+  compileSdkVersion 27
+  buildToolsVersion '27.0.3'
 
   defaultConfig {
     minSdkVersion 15
-    targetSdkVersion 23
+    targetSdkVersion 27
     versionCode 1
     versionName version
   }
@@ -39,10 +56,10 @@ android {
 }
 
 dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
-  testCompile 'junit:junit:4.12'
-  compile 'com.android.support:appcompat-v7:23.1.1'
-  compile 'com.android.support:design:23.1.1'
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  testImplementation 'junit:junit:4.12'
+  implementation 'com.android.support:appcompat-v7:27.1.1'
+  implementation 'com.android.support:design:27.1.1'
 }
 
 apply plugin: 'com.github.dcendents.android-maven'

@@ -1,85 +1,28 @@
+<!--
+  ~ Created by Jose Fuentes on 9/12/17 17:31
+  ~ Copyright (C) 2017
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License"),
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources>
-  <string name="app_name">Underactivity-sample</string>
+  <string name="app_name">Underactivity Sample</string>
 
-  <string name="maincontent_customlayout">Main Content: Custom Layout</string>
-  <string name="maincontent_customlayout_text">Hello, I am a simple Activity created from custom layout resource. This is my code:</string>
-  <string name="main_content_customlayout_code"><![CDATA[
-  \n\@Override
-  \nprotected Builder configureActivityBuilder(Builder builder) {
-    \n\t\treturn builder.setContentLayoutResource(R.layout.custom_layout);
-  \n}
-  ]]></string>
-
-  <string name="maincontent_fragment">Main Content: Fragment</string>
-  <string name="maincontent_fragment_text">Hello, I am an Activity hosting one fragment. This is my code:</string>
-  <string name="maincontent_fragment_code"><![CDATA[
-  \n\@Override
-  \nprotected Builder configureActivityBuilder(Builder builder) {
-    \n\t\treturn builder;
-  \n}
-\n\n
-  \n\@Override
-  \npublic void onPostCreate(Bundle savedInstanceState) {
-    \n\t\tsuper.onPostCreate(savedInstanceState);
-    \n\t\tsetFragment(new FragmentExample());
-  \n}
-  ]]></string>
-  <string name="drawer_navigationview">Drawer: NavigationView</string>
-  <string name="drawer_navigationview_text">Hello, I am an Activity who has a NavigationView drawer. This is my code:</string>
-  <string name="drawer_navigationview_code"><![CDATA[
-  \n\@Override
-  \nprotected Builder configureActivityBuilder(Builder builder) {
-  \n\t\treturn builder.setContentLayoutResource(R.layout.custom_layout)
-  \n.setDrawerMenuResource(R.menu.drawer_menu)
-  \n.setDrawerHeaderResource(R.layout.header_navigation_drawer)
-  \n.setDrawerOnNavigationItemSelectedListener(listener);
-  \n}
-  ]]></string>
-  <string name="drawer_customlayout">Drawer: Custom Layout</string>
-  <string name="drawer_customlayout_text">Hello, I am an Activity who has a Navigation Drawer inflated from a custom layout resource. This is my code:</string>
-  <string name="drawer_customlayout_code"><![CDATA[
-  \n\@Override
-  \nprotected Builder configureActivityBuilder(Builder builder) {
-  \n\t\treturn builder.setContentLayoutResource(R.layout.custom_layout)
-  \n.setDrawerCustomLayoutResource(R.layout.custom_drawer);
-  \n}
-  ]]></string>
-  <string name="toolbar_default">Toolbar: Default Toolbar</string>
-  <string name="toolbar_default_text">Hello, I am an Activity with Toolbar. This is my code:</string>
-  <string name="toolbar_default_code"><![CDATA[
-  \n\@Override
-  \nprotected Builder configureActivityBuilder(Builder builder) {
-  \n\t\treturn builder.setContentLayoutResource(R.layout.custom_layout)
-  \n.enableToolbar(true)
-  \n.setToolbarBackgroundColor(getResources().getColor(R.color.accentColor));
-  \n}
-  ]]></string>
-  <string name="toolbar_customlayout">Toolbar: Custom Layout</string>
-  <string name="toolbar_customlayout_text">Hello, I am an Activity with Toolbar inflated from layout. This is my code:</string>
-  <string name="toolbar_customlayout_code"><![CDATA[
-  \n\@Override
-  \nprotected Builder configureActivityBuilder(Builder builder) {
-  \n\t\treturn builder.setContentLayoutResource(R.layout.custom_layout)
-  \n.setToolbarResource(R.layout.custom_toolbar);
-  \n}
-  ]]></string>
-  <string name="all_in_one">Drawer + Toolbar</string>
-  <string name="all_in_one_text">Hello, I combine custom layout, NavigationView drawer and Toolbar. There are multiple configurations you can try for an Activity. Now do it yourself!</string>
-  <string name="all_in_one_code"><![CDATA[
-  \n\@Override
-  \nprotected Builder configureActivityBuilder(Builder builder) {
-  \n\t\treturn builder.setContentLayoutResource(R.layout.custom_layout)
-  \n.setToolbarBackgroundColor(getResources().getColor(R.color.accentColor))
-  \n.setDrawerHeaderResource(R.layout.header_navigation_drawer)
-  \n.setDrawerMenuResource(R.menu.drawer_menu)
-  \n.setDrawerOnNavigationItemSelectedListener(this)
-  \n.setToolbarDrawerIcon(R.drawable.ic_menu);
-  \n}
-  ]]></string>
-
+  <string name="sample_option">Sample option</string>
+  <string name="sample_action">Sample action</string>
   <string name="share">Share</string>
-  <string name="next">Next</string>
-  <string name="selector">Navigation Drawer from Resource</string>
+  <string name="share_link">UnderActivity, the library with which you can easily configure multiple parts of modern activities (drawer, toolbar, tabs…)
+    \nhttps://github.com/ydrojen/underactivity</string>
+  <string name="content">Content</string>
 
-  <string name="share_url" translatable="false">https://github.com/ydrojen/underactivity</string>
 </resources>
