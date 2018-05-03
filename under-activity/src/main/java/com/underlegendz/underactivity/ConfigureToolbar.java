@@ -3,6 +3,7 @@ package com.underlegendz.underactivity;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -29,8 +30,17 @@ class ConfigureToolbar {
       underActivity.setContent(new LinearLayout(underActivity));
       ((LinearLayout) underActivity.getContent()).setOrientation(LinearLayout.VERTICAL);
     }
-    underActivity.getContent().setLayoutParams(underActivity.getDrawerLayoutParams());
-    underActivity.getDrawerLayout().addView(underActivity.getContent(), 0);
+    LinearLayout llContainer = new LinearLayout(underActivity);
+    llContainer.setOrientation(LinearLayout.VERTICAL);
+    llContainer.setLayoutParams(underActivity.getDrawerLayoutParams());
+    underActivity.getContent().setLayoutParams(new LinearLayout.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT));
+    if (builder.toolbarTopView != null) {
+      llContainer.addView(builder.toolbarTopView);
+    }
+    llContainer.addView(underActivity.getContent());
+    underActivity.getDrawerLayout().addView(llContainer, 0);
 
     if (builder.enableToolbar) {
 
@@ -76,9 +86,6 @@ class ConfigureToolbar {
                   ViewGroup.LayoutParams.WRAP_CONTENT);
           appBarLayoutParams.setScrollFlags(builder.toolbarScrollFlags);
           underActivity.getToolbar().setLayoutParams(appBarLayoutParams);
-          if (builder.toolbarTopView != null) {
-            appBarLayout.addView(builder.toolbarTopView);
-          }
           appBarLayout.addView(underActivity.getToolbar());
 
           if (builder.enableToolbarTabs) {
@@ -117,9 +124,6 @@ class ConfigureToolbar {
               new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                   ViewGroup.LayoutParams.WRAP_CONTENT);
           underActivity.getToolbar().setLayoutParams(linearLayoutParams);
-          if(builder.toolbarTopView != null){
-            underActivity.getContent().addView(builder.toolbarTopView);
-          }
           underActivity.getContent().addView(underActivity.getToolbar());
         }
       }
