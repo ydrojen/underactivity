@@ -13,7 +13,7 @@ ext {
   siteUrl = 'https://github.com/ydrojen/underactivity'
   gitUrl = 'https://github.com/ydrojen/underactivity.git'
 
-  libraryVersion = '1.1.1-inditex'
+  libraryVersion = '1.1.2-inditex'
 
   developerId = 'ydrojen'
   developerName = 'Jose Fuentes'
@@ -26,7 +26,7 @@ ext {
 
 android {
   compileSdkVersion 27
-  buildToolsVersion "23.0.3"
+  buildToolsVersion '27.0.3'
 
   defaultConfig {
     minSdkVersion 15
@@ -39,10 +39,10 @@ android {
 }
 
 dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
-  testCompile 'junit:junit:4.12'
-  compile 'com.android.support:appcompat-v7:27.1.1'
-  compile 'com.android.support:design:27.1.1'
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  testImplementation 'junit:junit:4.12'
+  implementation 'com.android.support:appcompat-v7:27.1.1'
+  implementation 'com.android.support:design:27.1.1'
 }
 
 apply plugin: 'com.github.dcendents.android-maven'
