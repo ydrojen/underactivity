@@ -77,9 +77,14 @@ class ConfigureToolbar {
               ViewGroup.LayoutParams.WRAP_CONTENT);
       appBarLayout.setLayoutParams(coordinatorLayoutParams);
 
-      AppBarLayout.LayoutParams appBarLayoutParams =
-          new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-              ViewGroup.LayoutParams.WRAP_CONTENT);
+      AppBarLayout.LayoutParams appBarLayoutParams;
+      if (toolbarView.getLayoutParams() != null) {
+        appBarLayoutParams = new AppBarLayout.LayoutParams(toolbarView.getLayoutParams());
+        appBarLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+      } else {
+        appBarLayoutParams = new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
+      }
       appBarLayoutParams.setScrollFlags(builder.toolbarScrollFlags);
       toolbarView.setLayoutParams(appBarLayoutParams);
       appBarLayout.addView(toolbarView);
