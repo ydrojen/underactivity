@@ -18,6 +18,7 @@
 package com.underlegendz.underactivity;
 
 import android.os.Bundle;
+import androidx.annotation.IdRes;
 import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -78,18 +79,26 @@ public abstract class UnderActivity extends AppCompatActivity implements UnderAc
   }
 
   protected void setFragment(Fragment fragment) {
-    setFragment(fragment, DEFAULT_TAG, false);
+    setFragment(fragment, R.id.main_content, DEFAULT_TAG, false);
+  }
+
+  protected void setFragment(Fragment fragment, @IdRes int containerId) {
+    setFragment(fragment, containerId, DEFAULT_TAG, false);
   }
 
   protected void setFragment(Fragment fragment, boolean addToBackStack) {
-    setFragment(fragment, DEFAULT_TAG, addToBackStack);
+    setFragment(fragment, R.id.main_content, DEFAULT_TAG, addToBackStack);
   }
 
   protected void setFragment(Fragment fragment, String tag) {
-    setFragment(fragment, tag, false);
+    setFragment(fragment, R.id.main_content, tag, false);
   }
 
   protected void setFragment(Fragment fragment, String tag, boolean addToBackStack) {
+    setFragment(fragment, R.id.main_content, tag, addToBackStack);
+  }
+
+  protected void setFragment(Fragment fragment, @IdRes int containerId, String tag, boolean addToBackStack) {
     if (fragment != null && getSupportFragmentManager() != null) {
       FragmentTransaction replaceTransaction = getSupportFragmentManager().beginTransaction();
       replaceTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);
