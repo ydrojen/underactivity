@@ -19,10 +19,9 @@ package com.underlegendz.underactivity_sample.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
+import androidx.annotation.NonNull;
+import com.google.android.material.navigation.NavigationView;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.underlegendz.underactivity.ActivityBuilder;
 import com.underlegendz.underactivity_sample.R;

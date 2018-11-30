@@ -16,7 +16,7 @@
   ~ limitations under the License.
   -->
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:orientation="vertical"
   android:layout_width="match_parent"
@@ -41,7 +41,8 @@
       android:layout_marginRight="8dp"
       android:padding="0.5dp"
       android:background="@drawable/shape_border"
-      tools:src="@drawable/navigation_drawer"/>
+      tools:src="@drawable/navigation_drawer"
+      tools:ignore="ContentDescription" />
 
     <TextView
       android:id="@+id/sample_row_title"
@@ -63,4 +64,4 @@
       android:textColor="@color/secondary_text"
       tools:text="Sample description in one \nor two lines"/>
   </RelativeLayout>
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

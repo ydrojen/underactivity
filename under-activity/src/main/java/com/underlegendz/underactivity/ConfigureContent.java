@@ -18,8 +18,8 @@
 package com.underlegendz.underactivity;
 
 import android.app.Activity;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
+import com.google.android.material.appbar.AppBarLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;

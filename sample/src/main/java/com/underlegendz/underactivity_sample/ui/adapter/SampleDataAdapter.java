@@ -18,7 +18,8 @@
 package com.underlegendz.underactivity_sample.ui.adapter;
 
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,20 +32,21 @@ import java.util.List;
 
 public class SampleDataAdapter extends RecyclerView.Adapter<SampleDataAdapter.SampleDataViewHolder> {
 
-  List<Sample> mSampleList;
+  private List<Sample> mSampleList;
 
   public SampleDataAdapter() {
     mSampleList = SamplesRepository.getSamples();
   }
 
+  @NonNull
   @Override
-  public SampleDataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public SampleDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     return new SampleDataViewHolder(LayoutInflater.from(
         parent.getContext()).inflate(R.layout.row_sample, parent, false));
   }
 
   @Override
-  public void onBindViewHolder(SampleDataViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull SampleDataViewHolder holder, int position) {
     Sample sample = mSampleList.get(position);
     holder.image.setImageResource(sample.getImageResource());
     holder.description.setText(sample.getDescription());
@@ -63,7 +65,7 @@ public class SampleDataAdapter extends RecyclerView.Adapter<SampleDataAdapter.Sa
     TextView title;
     TextView description;
 
-    public SampleDataViewHolder(View itemView) {
+    SampleDataViewHolder(View itemView) {
       super(itemView);
       itemView.setOnClickListener(this);
       image = itemView.findViewById(R.id.sample_row_image);

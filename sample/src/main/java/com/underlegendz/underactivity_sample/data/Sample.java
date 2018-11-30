@@ -17,13 +17,14 @@
 
 package com.underlegendz.underactivity_sample.data;
 
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 public class Sample {
-  String title;
-  String description;
-  @DrawableRes int imageResource;
-  Class<?> destinationActivity;
+  private String title;
+  private String description;
+  @DrawableRes
+  private int imageResource;
+  private Class<?> destinationActivity;
 
   public String getTitle() {
     return title;
