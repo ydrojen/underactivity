@@ -17,15 +17,14 @@
 
 package com.underlegendz.underactivity;
 
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.TabLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.appbar.AppBarLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.tabs.TabLayout;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 class ConfigureToolbar {
 
@@ -78,16 +77,20 @@ class ConfigureToolbar {
               ViewGroup.LayoutParams.WRAP_CONTENT);
       appBarLayout.setLayoutParams(coordinatorLayoutParams);
 
-      AppBarLayout.LayoutParams appBarLayoutParams =
-          new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-              ViewGroup.LayoutParams.WRAP_CONTENT);
+      AppBarLayout.LayoutParams appBarLayoutParams;
+      if (toolbarView.getLayoutParams() != null) {
+        appBarLayoutParams = new AppBarLayout.LayoutParams(toolbarView.getLayoutParams());
+        appBarLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+      } else {
+        appBarLayoutParams = new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
+      }
       appBarLayoutParams.setScrollFlags(builder.toolbarScrollFlags);
       toolbarView.setLayoutParams(appBarLayoutParams);
       appBarLayout.addView(toolbarView);
 
       if (builder.enableToolbarTabs) {
-        TabLayout tabLayout = null;
-
+        TabLayout tabLayout;
         if (builder.tabLayoutResource != null) {
           tabLayout = (TabLayout) activity.getLayoutInflater()
               .inflate(builder.tabLayoutResource, content, false);

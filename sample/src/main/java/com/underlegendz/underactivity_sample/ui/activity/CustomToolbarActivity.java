@@ -1,5 +1,5 @@
 /*
- * Created by Jose Fuentes on 9/12/17 21:06
+ * Created by Jose Fuentes on 9/12/17 22:37
  * Copyright (C) 2017
  *
  * Licensed under the Apache License, Version 2.0 (the "License"),
@@ -19,48 +19,37 @@ package com.underlegendz.underactivity_sample.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.navigation.NavigationView;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import com.underlegendz.underactivity.ActivityBuilder;
 import com.underlegendz.underactivity_sample.R;
 import com.underlegendz.underactivity_sample.ui.BaseActivity;
 
-public class NavigationViewActivity extends BaseActivity
-    implements NavigationView.OnNavigationItemSelectedListener {
+public class CustomToolbarActivity extends BaseActivity implements View.OnClickListener {
 
   @Override
   protected ActivityBuilder configureActivityBuilder(ActivityBuilder builder) {
     return super.configureActivityBuilder(builder)
-        .setDrawerNavigationViewHeader(R.layout.navigation_header)
-        .setDrawerNavigationViewMenuResource(R.menu.drawer_menu)
-        .setDrawerOnNavigationItemSelectedListener(this)
-        .setToolbarDrawerIcon(R.drawable.ic_menu)
+        .setToolbar(R.layout.custom_toolbar)
         .setContentLayout(R.layout.content);
   }
 
   @Override
   public void onPostCreate(Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
-    getToolbar().setTitle("Navigation View");
+    findViewById(R.id.toolbar_share).setOnClickListener(this);
   }
 
   @Override
-  public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-    switch (item.getItemId()){
-      case R.id.drawer_option:
-        Toast.makeText(this, R.string.sample_action, Toast.LENGTH_SHORT).show();
-        break;
-      case R.id.drawer_share:
-        Intent intent=new Intent(android.content.Intent.ACTION_SEND);
+  public void onClick(View view) {
+    switch (view.getId()) {
+      case R.id.toolbar_share:
+        Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_link));
         startActivity(Intent.createChooser(intent, getString(R.string.share)));
         break;
     }
-    getDrawerLayout().closeDrawers();
-    return false;
   }
 }

@@ -17,17 +17,20 @@
 
 package com.underlegendz.underactivity_sample.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.underlegendz.underactivity_sample.R;
 
-public class RecyclerFragment extends android.support.v4.app.Fragment {
+public class RecyclerFragment extends Fragment {
 
   public static RecyclerFragment newInstance() {
     Bundle args = new Bundle();
@@ -36,22 +39,24 @@ public class RecyclerFragment extends android.support.v4.app.Fragment {
     return fragment;
   }
 
-  static final int SIZE = 50;
+  private static final int SIZE = 50;
 
   @Nullable
-  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+  @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     View v = inflater.inflate(R.layout.recycler, container, false);
     RecyclerView recyclerView = v.findViewById(R.id.recycler);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setAdapter(new RecyclerView.Adapter() {
+      @NonNull
       @Override
-      public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+      public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.row_sample, parent, false));
       }
 
+      @SuppressLint("SetTextI18n")
       @Override
-      public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+      public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((ViewHolder) holder).text.setText("Data - "+position);
       }
 
@@ -67,9 +72,9 @@ public class RecyclerFragment extends android.support.v4.app.Fragment {
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
     TextView text;
-    public ViewHolder(View itemView) {
+    ViewHolder(View itemView) {
       super(itemView);
-      text = (TextView) itemView.findViewById(R.id.text);
+      text = itemView.findViewById(R.id.text);
     }
   }
 }

@@ -18,13 +18,14 @@
 package com.underlegendz.underactivity;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.IdRes;
+import com.google.android.material.tabs.TabLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import com.underlegendz.library.R;
 import java.util.UUID;
@@ -78,18 +79,26 @@ public abstract class UnderActivity extends AppCompatActivity implements UnderAc
   }
 
   protected void setFragment(Fragment fragment) {
-    setFragment(fragment, DEFAULT_TAG, false);
+    setFragment(fragment, R.id.main_content, DEFAULT_TAG, false);
+  }
+
+  protected void setFragment(Fragment fragment, @IdRes int containerId) {
+    setFragment(fragment, containerId, DEFAULT_TAG, false);
   }
 
   protected void setFragment(Fragment fragment, boolean addToBackStack) {
-    setFragment(fragment, DEFAULT_TAG, addToBackStack);
+    setFragment(fragment, R.id.main_content, DEFAULT_TAG, addToBackStack);
   }
 
   protected void setFragment(Fragment fragment, String tag) {
-    setFragment(fragment, tag, false);
+    setFragment(fragment, R.id.main_content, tag, false);
   }
 
   protected void setFragment(Fragment fragment, String tag, boolean addToBackStack) {
+    setFragment(fragment, R.id.main_content, tag, addToBackStack);
+  }
+
+  protected void setFragment(Fragment fragment, @IdRes int containerId, String tag, boolean addToBackStack) {
     if (fragment != null && getSupportFragmentManager() != null) {
       FragmentTransaction replaceTransaction = getSupportFragmentManager().beginTransaction();
       replaceTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);

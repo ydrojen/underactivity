@@ -17,9 +17,9 @@
 
 package com.underlegendz.underactivity;
 
-import android.support.design.widget.TabLayout;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.tabs.TabLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.widget.Toolbar;
 
 /**
  * If the activity passed to ActivityRender implement this interface it can receive the references

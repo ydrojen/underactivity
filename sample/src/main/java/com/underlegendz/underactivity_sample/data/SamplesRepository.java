@@ -19,6 +19,7 @@ package com.underlegendz.underactivity_sample.data;
 
 import com.underlegendz.underactivity_sample.R;
 import com.underlegendz.underactivity_sample.ui.activity.CustomDrawerActivity;
+import com.underlegendz.underactivity_sample.ui.activity.CustomToolbarActivity;
 import com.underlegendz.underactivity_sample.ui.activity.NavigationViewActivity;
 import com.underlegendz.underactivity_sample.ui.activity.NoExtendsActivity;
 import java.util.LinkedList;
@@ -50,6 +51,14 @@ public class SamplesRepository {
         .setDescription("DrawerLayout initialized with custom 'drawer' layout")
         .setImageResource(R.drawable.navigation_drawer)
         .setDestinationActivity(CustomDrawerActivity.class)
+    );
+
+    // Toolbar
+    sampleList.add(new Sample()
+        .setTitle("Custom Toolbar layout")
+        .setDescription("Toolbar initialized with custom layout")
+        .setImageResource(R.drawable.toolbars)
+        .setDestinationActivity(CustomToolbarActivity.class)
     );
 
     return sampleList;
